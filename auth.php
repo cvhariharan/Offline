@@ -24,9 +24,7 @@ $tags = explode("++",$input);
 $username = trim($tags[0]);
 $passw = trim(crypt(md5(trim($tags[1])),md5(trim($tags[1]))));
 $done = "1";
-$notdone = "Not authenticated";
-if(isset($username)&&isset($password))
-{
+$notdone = "0";
 $sql = "SELECT * FROM users WHERE username=\"$username\" AND passw=\"$passw\"";
 $result = mysqli_query($link,$sql);
 $row = mysqli_fetch_array($result);
@@ -41,8 +39,8 @@ unset($username);
 unset($password);
 }
 else
-	socket_write($spawn,$done,strlen($done));
-}
+	socket_write($spawn,$notdone,strlen($notdone));
+
 socket_close($spawn);
 socket_close($socket);
 }

@@ -4,13 +4,15 @@
 #include<conio.h>
 main()
 {
-    int i=0,ret;
+    int i=0,ret,auth=0;
     FILE *fp;
     char command[200],username[30],password[30],c,a[61],out[10];
+    while(auth==0)
+    {
     printf("Username: ");
     scanf("%s",username);
     getchar();
-    printf("\nPassword: ");
+    printf("Password: ");
     do
     {
         c = getchar();
@@ -36,8 +38,16 @@ main()
     if(!strcmp(out,"1"))
     {
         printf("Authenticated\n");
+        auth=1;
+        break;
     }
-    getchar();
+    else if(!strcmp(out,"0"))
+    {
+        printf("Could not authenticate!\n");
+    }
+    strcpy(out,"");
+    i=0;
+    }
     getchar();
     /*strcpy(command, username);
     strcat(command, "++");
