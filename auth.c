@@ -48,6 +48,10 @@ main()
     strcpy(out,"");
     i=0;
     }
+    if(auth==1)
+    {
+        system("listing.exe");
+    }
     getchar();
     /*strcpy(command, username);
     strcat(command, "++");

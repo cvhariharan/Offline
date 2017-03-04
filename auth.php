@@ -34,6 +34,8 @@ if(!empty($row))
 {
 	$res = mysqli_query($link,"INSERT INTO users (ip) VALUES (\"$ip\") WHERE username = \"$username\"");
 	socket_write($spawn,$done,strlen($done));
+	$file = socket_read($spawn,4096);
+	$files = explode("\n",$file);
 	fwrite($fp,$write,strlen($write));
 unset($username);
 unset($password);
