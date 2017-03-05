@@ -50,7 +50,7 @@ main()
     }
     if(auth==1)
     {
-        system("listing.exe");
+        system("listing jabssfkueg54af");
     }
     getchar();
     /*strcpy(command, username);

@@ -1,57 +1,125 @@
 <?php
-set_time_limit(0);
-// open a server on port 
-$server = stream_socket_server("tcp://127.0.0.1:6666", $errno, $errorMessage);
+error_reporting(~E_NOTICE);
+set_time_limit (0);
  
-if ($server === false) 
+$address = "127.0.0.1";
+$port = 5000;
+$max_clients = 1000;
+ 
+if(!($sock = socket_create(AF_INET, SOCK_STREAM, 0)))
 {
-    die("Could not bind to socket: $errorMessage");
+    $errorcode = socket_last_error();
+    $errormsg = socket_strerror($errorcode);
+     
+    die("Couldn't create socket: [$errorcode] $errormsg \n");
 }
  
-$client_socks = array();
-while(true)
+echo "Socket created \n";
+ 
+// Bind the source address
+if( !socket_bind($sock, $address , 5000) )
 {
-    //prepare readable sockets
-    $read_socks = $client_socks;
-    $read_socks[] = $server;
+    $errorcode = socket_last_error();
+    $errormsg = socket_strerror($errorcode);
      
-    //start reading and use a large timeout
-    if(!stream_select ( $read_socks, $write, $except, 300000 ))
+    die("Could not bind socket : [$errorcode] $errormsg \n");
+}
+ 
+echo "Socket bind OK \n";
+ 
+if(!socket_listen ($sock , 10))
+{
+    $errorcode = socket_last_error();
+    $errormsg = socket_strerror($errorcode);
+     
+    die("Could not listen on socket : [$errorcode] $errormsg \n");
+}
+ 
+echo "Socket listen OK \n";
+ 
+echo "Waiting for incoming connections... \n";
+ 
+//array of client sockets
+$client_socks = array();
+ 
+//array of sockets to read
+$read = array();
+ 
+//start loop to listen for incoming connections and process existing connections
+while (true) 
+{
+    //prepare array of readable client sockets
+    $read = array();
+     
+    //first socket is the master socket
+    $read[0] = $sock;
+     
+    //now add the existing client sockets
+    for ($i = 0; $i < $max_clients; $i++)
     {
-        die('something went wrong while selecting');
+        if($client_socks[$i] != null)
+        {
+            $read[$i+1] = $client_socks[$i];
+        }
     }
      
-    //new client
-    if(in_array($server, $read_socks))
+    //now call select - blocking call
+    if(socket_select($read , $write , $except , null) === false)
     {
-        $new_client = stream_socket_accept($server);
-         
-        if ($new_client) 
+        $errorcode = socket_last_error();
+        $errormsg = socket_strerror($errorcode);
+     
+        die("Could not listen on socket : [$errorcode] $errormsg \n");
+    }
+     
+    //if ready contains the master socket, then a new connection has come in
+    if (in_array($sock, $read)) 
+    {
+        for ($i = 0; $i < $max_clients; $i++)
         {
-            //print remote client information, ip and port number
-            echo 'Connection accepted from ' . stream_socket_get_name($new_client, true) . "n";
+            if ($client_socks[$i] == null) 
+            {
+                $client_socks[$i] = socket_accept($sock);
+                 
+                //display information about the client who is connected
+                if(socket_getpeername($client_socks[$i], $address, $port))
+                {
+                    echo "Client $address : $port is now connected to us. \n";
+                }
+                 
+                //Send Welcome message to client
+                $message = "Welcome to php socket server version 1.0 \n";
+                $message .= "Enter a message and press enter, and i shall reply back \n";
+				socket_write($client_socks[$i] , $address);
+                socket_write($client_socks[$i] , $message);
+                break;
+            }
+        }
+    }
+ 
+    //check each client if they send any data
+    for ($i = 0; $i < $max_clients; $i++)
+    {
+        if (in_array($client_socks[$i] , $read))
+        {
+            $input = socket_read($client_socks[$i] , 1024);
              
-            $client_socks[] = $new_client;
-            echo "Now there are total ". count($client_socks) . " clients.n";
+            if ($input == null) 
+            {
+                //zero length string meaning disconnected, remove and close the socket
+                unset($client_socks[$i]);
+                socket_close($client_socks[$i]);
+            }
+ 
+            $n = trim($input);
+ 
+            $output = "OK ... $input";
+             
+            echo "Sending output to client \n";
+             
+            //send response to client
+            socket_write($client_socks[$i] , $output);
         }
-         
-        //delete the server socket from the read sockets
-        unset($read_socks[ array_search($server, $read_socks) ]);
-    }
-     
-    //message from existing client
-    foreach($read_socks as $sock)
-    {
-        $data = fread($sock, 4096);
-        if(!$data)
-        {
-            unset($client_socks[ array_search($sock, $client_socks) ]);
-            @fclose($sock);
-            echo "A client disconnected. Now there are total ". count($client_socks) . " clients.n";
-            continue;
-        }
-        //send the message back to client
-        fwrite($sock, $data);
     }
 }
 ?>
