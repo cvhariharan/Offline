@@ -35,14 +35,6 @@ if(!empty($row))
 {
 	
 	socket_write($spawn,$done,strlen($done));
-	$file = socket_read($spawn,4096);
-	socket_getpeername($spawn,$ip);
-	$write = "$ip \r\n";
-	$res = mysqli_query($link,"INSERT INTO users (ip) VALUES (\"$ip\") WHERE username = \"$username\"");
-	$files = explode("\n",$file);
-	foreach($files as $location)
-	$resu = mysqli_query($link,"INSERT INTO files (location,ip) VALUES (\"$location\",\"$ip\")");
-	fwrite($fp,$write,strlen($write));
 unset($username);
 unset($password);
 }
