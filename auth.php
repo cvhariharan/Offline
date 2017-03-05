@@ -18,7 +18,7 @@ listenern");
 $spawn = socket_accept($socket) or die("Could not accept incoming
 connectionn");
 $input = socket_read($spawn,1024)  or die("Could not read inputn");
-socket_getpeername($spawn,$ip);
+
 $input = trim($input);
 $tags = explode("++",$input);
 $username = trim($tags[0]);
@@ -28,14 +28,20 @@ $notdone = "0";
 $sql = "SELECT * FROM users WHERE username=\"$username\" AND passw=\"$passw\"";
 $result = mysqli_query($link,$sql);
 $row = mysqli_fetch_array($result);
-$write = "$ip \r\n";
+$id = $row['id'];
+
 
 if(!empty($row))
 {
-	$res = mysqli_query($link,"INSERT INTO users (ip) VALUES (\"$ip\") WHERE username = \"$username\"");
+	
 	socket_write($spawn,$done,strlen($done));
 	$file = socket_read($spawn,4096);
+	socket_getpeername($spawn,$ip);
+	$write = "$ip \r\n";
+	$res = mysqli_query($link,"INSERT INTO users (ip) VALUES (\"$ip\") WHERE username = \"$username\"");
 	$files = explode("\n",$file);
+	foreach($files as $location)
+	$resu = mysqli_query($link,"INSERT INTO files (location,ip) VALUES (\"$location\",\"$ip\")");
 	fwrite($fp,$write,strlen($write));
 unset($username);
 unset($password);
