@@ -1,9 +1,9 @@
 <?php
 error_reporting(~E_NOTICE);
 set_time_limit (0);
- 
+require "database.php";
 $address = "127.0.0.1";
-$port = 5000;
+$port = 31337;
 $max_clients = 1000;
  
 if(!($sock = socket_create(AF_INET, SOCK_STREAM, 0)))
@@ -17,7 +17,7 @@ if(!($sock = socket_create(AF_INET, SOCK_STREAM, 0)))
 echo "Socket created \n";
  
 // Bind the source address
-if( !socket_bind($sock, $address , 5000) )
+if( !socket_bind($sock, $address , $port) )
 {
     $errorcode = socket_last_error();
     $errormsg = socket_strerror($errorcode);
@@ -82,16 +82,13 @@ while (true)
                 $client_socks[$i] = socket_accept($sock);
                  
                 //display information about the client who is connected
-                if(socket_getpeername($client_socks[$i], $address, $port))
-                {
-                    echo "Client $address : $port is now connected to us. \n";
-                }
+                
                  
                 //Send Welcome message to client
-                $message = "Welcome to php socket server version 1.0 \n";
+                /*$message = "Welcome to php socket server version 1.0 \n";
                 $message .= "Enter a message and press enter, and i shall reply back \n";
 				socket_write($client_socks[$i] , $address);
-                socket_write($client_socks[$i] , $message);
+                socket_write($client_socks[$i] , $message);*/
                 break;
             }
         }
@@ -102,7 +99,17 @@ while (true)
     {
         if (in_array($client_socks[$i] , $read))
         {
-            $input = socket_read($client_socks[$i] , 1024);
+				$input = socket_read($client_socks[$i],1024)  or die("Could not read inputn");
+
+				$input = trim($input);
+				$tags = explode("++",$input);
+				$username = trim($tags[0]);
+				$passw = trim(crypt(md5(trim($tags[1])),md5(trim($tags[1]))));
+				$done = "1";
+				$notdone = "0";
+				$sql = "SELECT * FROM users WHERE username=\"$username\" AND passw=\"$passw\"";
+				$result = mysqli_query($link,$sql);
+				$row = mysqli_fetch_array($result);
              
             if ($input == null) 
             {
@@ -110,15 +117,22 @@ while (true)
                 unset($client_socks[$i]);
                 socket_close($client_socks[$i]);
             }
- 
-            $n = trim($input);
+			if(!empty($row))
+		{
+	socket_write($client_socks[$i],$done,strlen($done));
+	unset($username);
+	unset($password);
+		}
+else
+	socket_write($client_socks[$i],$notdone,strlen($notdone));
+            /*$n = trim($input);
  
             $output = "OK ... $input";
              
             echo "Sending output to client \n";
              
             //send response to client
-            socket_write($client_socks[$i] , $output);
+            socket_write($client_socks[$i] , $output);*/
         }
     }
 }

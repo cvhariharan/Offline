@@ -51,6 +51,7 @@ main()
     if(auth==1)
     {
         system("listing jabssfkueg54af");
+        printf("Files listed.\n");
     }
     getchar();
     /*strcpy(command, username);
