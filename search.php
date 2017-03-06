@@ -107,22 +107,28 @@ while (true)
 				//$passw = trim(crypt(md5(trim($tags[1])),md5(trim($tags[1]))));
 				//$done = "1";
 				//$notdone = "0";
+				if ($input == null) 
+            {
+                //zero length string meaning disconnected, remove and close the socket
+                unset($client_socks[$i]);
+                socket_close($client_socks[$i]);
+            }
+				if($input != NULL)
+				{
 				$sql = "SELECT * FROM files WHERE MATCH (filename) AGAINST (\"$input\")";
 				$result = mysqli_query($link,$sql);
 				if($result != NULL)
 				{
 				while($row = mysqli_fetch_assoc($result))
 				{
+					socket_write($client_socks[$i],$row['id'],strlen($row['id']));
+					socket_write($client_socks[$i],"        ");
 					socket_write($client_socks[$i],$row['filename'],strlen($row['filename']));
 					socket_write($client_socks[$i],"\n");
 				}
 				}
-            if ($input == null) 
-            {
-                //zero length string meaning disconnected, remove and close the socket
-                unset($client_socks[$i]);
-                socket_close($client_socks[$i]);
-            }
+				}
+            
 			/*if(!empty($row))
 		{
 			foreach($rows as $data)

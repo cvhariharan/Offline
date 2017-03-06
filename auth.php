@@ -18,7 +18,7 @@ listenern");
 $spawn = socket_accept($socket) or die("Could not accept incoming
 connectionn");
 $input = socket_read($spawn,1024)  or die("Could not read inputn");
-
+socket_getpeername($spawn,$ip);
 $input = trim($input);
 $tags = explode("++",$input);
 $username = trim($tags[0]);
@@ -33,7 +33,7 @@ $id = $row['id'];
 
 if(!empty($row))
 {
-	
+	mysqli_query($link,"INSERT INTO users (ip) VALUES (\"$ip\") WHERE username=\"$username\" AND passw=\"$passw\"");
 	socket_write($spawn,$done,strlen($done));
 unset($username);
 unset($password);

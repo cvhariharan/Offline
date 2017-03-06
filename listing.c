@@ -13,7 +13,7 @@ main(int argc, char *argv[])
     char command[150],*out[500];
    // strcpy(command, "ncp -v -l -p 4444 > stdout");
     //system(command);
-    strcpy(command,"dir /b | ");
+    strcpy(command,"dir /s /b /a | ");
     strcat(command, "ncp 127.0.0.1 6666");
     fp = popen(command,"r");
     fgets(out,10,fp);

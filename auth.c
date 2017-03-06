@@ -6,7 +6,7 @@ main()
 {
     int i=0,ret,auth=0;
     FILE *fp;
-    char command[200],username[30],password[30],c,a[61],out[250],call[250];
+    char command[200],username[30],password[30],c,a[61],out[250],call[250],search[200];
     while(auth==0)
     {
     printf("Username: ");
@@ -40,6 +40,7 @@ main()
         printf("Authenticated\n");
         auth=1;
         pclose(fp);
+        strcpy(out,"");
         break;
     }
     else if(!strcmp(out,"0"))
@@ -53,13 +54,15 @@ main()
     {
         system("listing jabssfkueg54af");
         printf("Files listed.\n");
-        strcpy(command,"ncp -l -p 4133");
-        //strcat(command, "ncp -l -p 4133");
-        fp = popen(command,"r");
+        printf("Search: ");
+        scanf("%s",search);
+        strcpy(command, "echo ");
+    strcat(command,search);
+    strcat(command," | ncp 127.0.0.1 6555");
+    fp = popen(command,"r");
         fgets(out,200,fp);
+        printf("%s",out);
         fclose(fp);
-        strcpy(call,"uploader jabssfkueg54af out"); //Should be of the format : api_key ip file
-        system(call);
     }
     getchar();
     /*strcpy(command, username);
