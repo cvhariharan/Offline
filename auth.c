@@ -6,7 +6,7 @@ main()
 {
     int i=0,ret,auth=0;
     FILE *fp;
-    char command[200],username[30],password[30],c,a[61],out[250],call[250],search[200];
+    char command[200],username[30],password[30],c,a[61],out[250],call[250],search[200],buff[512],*li[500];
     while(auth==0)
     {
     printf("Username: ");
@@ -60,8 +60,13 @@ main()
     strcat(command,search);
     strcat(command," | ncp 127.0.0.1 6555");
     fp = popen(command,"r");
-        fgets(out,200,fp);
-        printf("%s",out);
+    i=0;
+         while(fgets(buff, sizeof(buff), fp)!=NULL){
+            li[i] = (char *)malloc(sizeof(buff));
+            strcpy(li[i],buff);
+            printf("%s",out[i]);
+            i++;
+            }
         fclose(fp);
     }
     getchar();
