@@ -4,7 +4,7 @@
 #include<conio.h>
 main()
 {
-    int i=0,ret,auth=0;
+    int i=0,ret,auth=0,id;
     FILE *fp;
     char command[200],username[30],password[30],c,a[61],out[250],call[250],search[200],buff[512],*li[500];
     while(auth==0)
@@ -64,10 +64,22 @@ main()
          while(fgets(buff, sizeof(buff), fp)!=NULL){
             li[i] = (char *)malloc(sizeof(buff));
             strcpy(li[i],buff);
-            printf("%s",out[i]);
+            printf("%s",li[i]);
             i++;
             }
         fclose(fp);
+        i=0;
+        printf("Enter the ID of the file to download:\n");
+        scanf("%d",&id);
+        strcpy(command, "echo ");
+        strcat(command,id);
+        strcat(command," | ncp 127.0.0.1 7777");
+        fp = popen(command,"r");
+        fgets(out,100,fp);
+        fclose(fp);
+        strcpy(call, "downloader jabssfkueg54af ");
+        stcat(call, out);
+        system(call);
     }
     getchar();
     /*strcpy(command, username);
