@@ -1,5 +1,6 @@
 import requests
-import os, sys, socket
+import os, sys, socket, json
+headers = {'content-type': 'application/json'}
 username = input("Username: ")
 password = input("Password: ")
 ipaddr = socket.gethostbyname(socket.gethostname())
@@ -7,7 +8,10 @@ r = requests.post('http://localhost/Offline/auth.php', data = {'username':userna
 if r.text == '1':
     print ("Authentication Successful!")
     #path = "/var/www/html/"
-    #dirs = os.listdir(path)
-
+    dirs = os.listdir(os.curdir)
+str_dir = str(dirs)
+response = requests.post('http://localhost/Offline/directorylist.php', data = {'list':str_dir})
+print("Response: \n")
+print(response.text)
 #for file in dirs:
-    #print (file)
+#    print (file)
