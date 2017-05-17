@@ -54,7 +54,7 @@ main()
     {
         system("listing jabssfkueg54af");
         printf("Files listed.\n");
-        printf("Search: ");
+	/* printf("Search: ");
         scanf("%s",search);
         strcpy(command, "echo ");
     strcat(command,search);
@@ -76,10 +76,11 @@ main()
         strcat(command," | ncp 127.0.0.1 7777");
         fp = popen(command,"r");
         fgets(out,100,fp);
-        fclose(fp);
-        strcpy(call, "downloader jabssfkueg54af ");
+        fclose(fp);*/
+	system("python -m SimpleHTTPServer 8000");
+	/* strcpy(call, "downloader jabssfkueg54af ");
         stcat(call, out);
-        system(call);
+        system(call);*/
     }
     getchar();
     /*strcpy(command, username);
