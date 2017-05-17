@@ -15,7 +15,7 @@ $password = trim(crypt(md5($pass),md5($pass)));
 $password1 = trim(crypt(md5($pass1),md5($pass1)));
 $check = mysqli_query($link,"SELECT * FROM users WHERE username = \"$username\"");
 $rowu = mysqli_fetch_array($check);
-if(isset($_POST['username']))
+if(isset($_POST['username']) && isset($_POST['passw']))
 {
 if(empty($rowu['username']))
 {
