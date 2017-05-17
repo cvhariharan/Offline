@@ -1,7 +1,7 @@
 <?php
 $dbhost = 'localhost';
 $dbuser = 'root';
-$dbpass = '';
+$dbpass = '10sa1017213';
 $link = mysqli_connect($dbhost,$dbuser,$dbpass);
-mysqli_select_db($link,'offline');
+mysqli_select_db($link,'Offline');
 ?>

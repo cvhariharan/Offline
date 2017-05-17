@@ -10,15 +10,18 @@ require "database.php";
 $username = $_POST["username"];
 $pass = $_POST["passw"];
 $pass1 = $_POST["passwr"];
+$ipaddr =  getHostByName(php_uname('n'));
 $password = trim(crypt(md5($pass),md5($pass)));
 $password1 = trim(crypt(md5($pass1),md5($pass1)));
 $check = mysqli_query($link,"SELECT * FROM users WHERE username = \"$username\"");
 $rowu = mysqli_fetch_array($check);
+if(isset($_POST['username']))
+{
 if(empty($rowu['username']))
 {
 if($password==$password1)
 {
-$sql = "INSERT INTO users (username,passw) VALUES (\"$username\",\"$password\")";
+$sql = "INSERT INTO users (username,passw,ip) VALUES (\"$username\",\"$password\",\"$ipaddr\")";
 $result = mysqli_query($link,$sql);
 if($result)
 {
@@ -32,4 +35,5 @@ else
 }
 else
 	echo "Username not available. Sign up again with another username.";
+}
 ?>
