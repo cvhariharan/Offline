@@ -1,4 +1,4 @@
-import os,urllib3
+import os,urllib3,urllib
 import base64
 from Crypto.Cipher import AES
 server_conf = open("sr.conf","r")
