@@ -1,5 +1,5 @@
 import os,urllib3
-import base64,requests
+import base64
 from Crypto.Cipher import AES
 server_conf = open("sr.conf","r")
 data = server_conf.readlines()

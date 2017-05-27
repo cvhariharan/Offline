@@ -12,11 +12,11 @@ def my_ip():
     return s.getsockname()[0]
 
 def basichttpserver(port,username,password):
-    server_command = "start cmd.exe @cmd /k \"basichttpserver " + str(port) + " " + username + ":" + password +"\""
+    server_command = "python basichttpserver.py " + str(port) + " " + username + ":" + password
     output = os.system(server_command)
 
 def downloader():
-    com = "downloader"
+    com = "python downloader.py"
     os.system(com)
 headers = {'content-type': 'application/json'}
 server_thread = threading.Thread(target=basichttpserver,args=(port,server_user,server_pass,))
@@ -24,6 +24,7 @@ server_thread.setDaemon(True)
 #download_thread.start()
 
 server_thread.start()
+server_thread.join(15)
 auth = 0
 attempts = 5
 while auth != 1 and attempts != 0:
