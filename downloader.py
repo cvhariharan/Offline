@@ -9,7 +9,7 @@ port = int(data[2].strip('Port:').strip('\n'))
 localhost = data[3].strip('Localhost:').strip('\n')
 def dns(name):
     http = urllib3.PoolManager()
-    r = http.request('POST','http://'+localhost+'dns_server.php',fields={'name':name})
+    r = http.request('POST','http://'+localhost+'/dns_server.php',fields={'name':name})
     return r.data
 def decodeAnddownload(fname):
     if os.path.exists(os.getcwd()+"/"+fname):
