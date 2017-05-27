@@ -1,27 +1,40 @@
 <?php
 require "database.php";
 $i=0;
-$result = mysqli_query($link, "SELECT ip FROM users WHERE 1");
+$result = mysqli_query($link, "SELECT * FROM files WHERE 1");
+$ip_list = Array();
 while($row = mysqli_fetch_array($result))
 {
-    if(!in_array($row[0],$ip_list))
-      $ip_list[$i] = $row[0];
-    $status = GetServerStatus("http://$row[0]",8000);
-    if($status == 'OFFLINE')
-        $sql = mysqli_query($link,"DELETE * FROM files WHERE ip = \"$row[0]\"");
+    if(!in_array($row['ip'],$ip_list))
+    {
+      $ip_list[$i] = $row['ip'];
+      $host = $row['ip'];
+      $port = $row['port'];
+    $status = getStatus($host,$port);
+    echo $host.$port."<br>";
+    if($status != '200')
+      {
+        echo "Offline";
+      $sql = mysqli_query($link,"DELETE * FROM files WHERE ip = \"$host\"");
+    }
+    else {
+      echo "Online";
+    }
+    $i++;
+  }
 }
 
-function GetServerStatus($site, $port)
+function getStatus($ip, $port)
 {
-$status = array("OFFLINE", "ONLINE");
-$fp = @fsockopen($site, $port, $errno, $errstr, 2);
-if (!$fp)
-{
-    return $status[0];
-} else
-  {
-     return $status[1];
-  }
+	/*$socket = @fsockopen($ip, $port, $errorNo, $errorStr, 2);
+	if (!$socket) return false;
+	else return true;*/
+  $curl = curl_init("http://$ip:$port");
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+$result = curl_exec($curl);
+$info = curl_getinfo($curl);
+print_r($info);
+return $info['http_code'];
 }
 
 ?>
