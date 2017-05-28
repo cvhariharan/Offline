@@ -20,4 +20,4 @@ while cursor.execute("SELECT * FROM files WHERE 1"):
             cursor.execute('DELETE FROM files WHERE ip = \'%s\''%ip)
             db.commit()
         print("IP:"+ip+", Port:"+port)
-        time.sleep(15)
+    time.sleep(15)
