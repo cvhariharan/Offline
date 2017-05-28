@@ -6,8 +6,8 @@
 <?php
 require 'database.php';
 $query = $_POST['query'];
-echo $query;
-$sql = "SELECT * FROM files WHERE MATCH (name,location) AGAINST(\"$query\") ORDER BY MATCH (name) AGAINST('$query') DESC";
+$ipaddr = $_SERVER['REMOTE_ADDR'];
+$sql = "SELECT * FROM files WHERE MATCH (name,location) AGAINST(\"$query\") AND ip != \"$ipaddr\" ORDER BY MATCH (name) AGAINST('$query') DESC";
 $result = mysqli_query($link,$sql);
 /*$row = mysqli_fetch_array($result);
 print_r($row);*/
