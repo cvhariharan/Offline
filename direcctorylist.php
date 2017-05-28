@@ -15,9 +15,10 @@ print_r($files);
 echo "</pre>";
 foreach ($files as $file)
 {
-  $hash = md5($file.$location);
-  $sql = "INSERT INTO `files`(`name`, `location`, `ip`, `username`, `server_user`, `server_pass`, `port`,`hash`) VALUES (\"$file\",\"$location\",\"$ipaddr\",\"$username\",\"$server_user\",\"$server_pass\",\"$port\",\"$hash\")";
+  $file_split = explode(":",$file);
+  $hash =  $file_split[1];
+  $name = $file_split[0];
+  $sql = "INSERT INTO `files`(`name`, `location`, `ip`, `username`, `server_user`, `server_pass`, `port`,`hash`) VALUES (\"$name\",\"$location\",\"$ipaddr\",\"$username\",\"$server_user\",\"$server_pass\",\"$port\",\"$hash\")";
   $result = mysqli_query($link,$sql);
 }
 ?>
-

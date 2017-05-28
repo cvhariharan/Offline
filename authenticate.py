@@ -1,4 +1,5 @@
 import requests, time, threading
+import hashlib,checksumdir
 import os, sys, socket, json, random, string
 server_conf = open("sr.conf","r")
 data = server_conf.readlines()
@@ -18,6 +19,16 @@ def basichttpserver(port,username,password):
 def downloader():
     com = "python downloader.py"
     os.system(com)
+
+def md5sum(filename):
+  with open(filename, mode='rb') as f:
+    d = hashlib.md5()
+    while True:
+      buf = f.read(4096) # 128 is smaller than the typical filesystem block
+      if not buf:
+        break
+      d.update(buf)
+    return d.hexdigest()
 headers = {'content-type': 'application/json'}
 server_thread = threading.Thread(target=basichttpserver,args=(port,server_user,server_pass,))
 server_thread.setDaemon(True)
@@ -47,9 +58,18 @@ while auth != 1 and attempts != 0:
         #print(server_user)
         #print(server_pass)
         #port = random.randint(6000,7000)
-        dirs = os.listdir(os.getcwd())
-        str_dir = str(dirs)
-        response = requests.post("http://"+localhost+"/direcctorylist.php", data = {'list':str_dir,'username':username,'ipaddr':ipaddr,'location':os.getcwd(),'server_user':server_user,'server_pass':server_pass,'port':port})
+        #dirs = os.listdir(os.getcwd())
+        #str_dir = str(dirs)
+        dir_list = os.listdir(os.getcwd())
+        dir_str = ""
+        for file in dir_list:
+            if not os.path.isdir(file):
+                #print(file+":"+md5sum(file))
+                dir_str = dir_str+","+str(file)+":"+md5sum(file)
+            else:
+                #print(file+":"+checksumdir.dirhash(file))
+                dir_str = dir_str+","+str(file)+":"+checksumdir.dirhash(file)
+        response = requests.post("http://"+localhost+"/direcctorylist.php", data = {'list':dir_str,'username':username,'ipaddr':ipaddr,'location':os.getcwd(),'server_user':server_user,'server_pass':server_pass,'port':port})
         #downloader()
 
         downloader()
