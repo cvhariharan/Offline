@@ -9,7 +9,7 @@ port = int(data[2].strip('Port:').strip('\n'))
 localhost = data[3].strip('Localhost:').strip('\n')
 def my_ip():
     s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-    s.connect(('192.0.0.8',1027))
+    s.connect(('192.0.0.2',1027))
     return s.getsockname()[0]
 
 def basichttpserver(port,username,password):
