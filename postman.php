@@ -11,6 +11,10 @@ $user = $row['server_user'];
 $pass = $row['server_pass'];
 $location = $row['location'];
 $servername = $row['username'];
+while($row = mysqli_fetch_array($result))
+{
+  $servername = $servername." ".$row['username'];
+}
 header("Content-type: text/plain");
 header("Content-Disposition: attachment; filename=$name.hv");
 $content = "Name:$name\r\nLocation:$location\r\nServer:$server\r\nPort:$port\r\nUsername:$user\r\nPassword:$pass\r\nHash:$hash\r\nServername:$servername\r\n";
