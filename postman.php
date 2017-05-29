@@ -1,7 +1,11 @@
 <?php
 require "database.php";
+session_start();
+if(isset($_SESSION['login']) && $_SESSION['login']==5)
+{
 $hash = $_GET['hash'];
 $sql = "SELECT * FROM files WHERE hash = \"$hash\"";
+//$log = "INSERT INTO stats (hash,name,)"
 $result = mysqli_query($link,$sql);
 $row = mysqli_fetch_array($result);
 $name = $row['name'];
@@ -23,8 +27,13 @@ $password = random_string();
 $encrypted = openssl_encrypt($content,'AES-256-CBC',$password);
 $encrypted = substr_replace($encrypted,$password,23,0);
 echo ($encrypted);
-
-function random_string($length = 32) {
+}
+else
+{
+echo "<a href=\"login.php\">Login</a>";
+}
+function random_string($length = 32)
+{
     return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
 }
 ?>
