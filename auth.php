@@ -1,6 +1,8 @@
 <?php
 set_time_limit(0);
 require "database.php";
+session_start();
+$_SESSION['login'] = 5;
 $username = $_POST['username'];
 $passw = $_POST['passw'];
 $ipaddr = $_POST['ipaddr'];
