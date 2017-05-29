@@ -17,7 +17,7 @@ session_start();
 
 $username = $_POST['username'];
 $passw = $_POST['passw'];
-$ipaddr = $_POST['ipaddr'];
+//$ipaddr = $_SERVER['REMOTE_ADDR'];
 if(isset($_POST['username']) && isset($_POST['passw']))
 {
 $password = trim(crypt(md5($passw),md5($passw)));
@@ -25,8 +25,8 @@ $result = mysqli_query($link,"SELECT * FROM users WHERE username = \"$username\"
 $row = mysqli_fetch_array($result);
 if($row['username'] == $username)
 {
-	$ipinsert = "UPDATE users SET ip=\"$ipaddr\" WHERE username=\"$username\" AND passw=\"$password\"";
-	$result_ip = mysqli_query($link,$ipinsert);
+	//$ipinsert = "UPDATE users SET ip=\"$ipaddr\" WHERE username=\"$username\" AND passw=\"$password\"";
+	//$result_ip = mysqli_query($link,$ipinsert);
   $_SESSION['login'] = 5;
   $_SESSION['username'] = $username;
 	echo "Logged in successfully!<br><a href=\"search.php\">Search</a><br>";
