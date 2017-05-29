@@ -7,6 +7,7 @@ server_user = data[0].strip('Username:').strip('\n')
 server_pass = data[1].strip('Password:').strip('\n')
 port = int(data[2].strip('Port:').strip('\n'))
 localhost = data[3].strip('Localhost:').strip('\n')
+status = 0 #Server is Offline
 def my_ip():
     s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
     s.connect(('192.0.0.2',1027))
@@ -29,13 +30,24 @@ def md5sum(filename):
         break
       d.update(buf)
     return d.hexdigest()
-headers = {'content-type': 'application/json'}
-server_thread = threading.Thread(target=basichttpserver,args=(port,server_user,server_pass,))
-server_thread.setDaemon(True)
-#download_thread.start()
 
-server_thread.start()
-server_thread.join(15)
+def server_status():
+    try:
+        r = requests.get("http://"+server_user+":"+server_pass+"@localhost:"+str(port))
+        if r.status_code == 200:
+            status = 1
+    except requests.exceptions.RequestException as e:
+        status = 0
+    return status
+headers = {'content-type': 'application/json'}
+if server_status() == 0:
+    server_thread = threading.Thread(target=basichttpserver,args=(port,server_user,server_pass,))
+    server_thread.setDaemon(True)
+    #download_thread.start()
+
+    server_thread.start()
+    server_thread.join(15)
+
 auth = 0
 attempts = 5
 while auth != 1 and attempts != 0:
