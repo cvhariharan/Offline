@@ -5,7 +5,7 @@ if(isset($_SESSION['login']) && $_SESSION['login']==5)
 {
 $hash = $_GET['hash'];
 $sql = "SELECT * FROM files WHERE hash = \"$hash\"";
-//$log = "INSERT INTO stats (hash,name,)"
+$client = $_SESSION['username'];
 $result = mysqli_query($link,$sql);
 $row = mysqli_fetch_array($result);
 $name = $row['name'];
@@ -19,6 +19,8 @@ $servername = $row['username'];
 {
   $servername = $servername." ".$row['username'];
 }*/
+$log = "INSERT INTO stats (hash,name,host,client) VALUES(\"$hash\",\"$name\",\"$servername\",\"$client\")";
+$log_result = mysqli_query($link,$log);
 header("Content-type: text/plain");
 header("Content-Disposition: attachment; filename=$name.hv");
 $content = "Name:$name\r\nLocation:$location\r\nServer:$server\r\nPort:$port\r\nUsername:$user\r\nPassword:$pass\r\nHash:$hash\r\nServername:$servername\r\n";
