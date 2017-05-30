@@ -75,12 +75,14 @@ while auth != 1 and attempts != 0:
         dir_list = os.listdir(os.getcwd())
         dir_str = ""
         for file in dir_list:
-            if not os.path.isdir(file):
-                #print(file+":"+md5sum(file))
-                dir_str = dir_str+","+str(file)+":"+md5sum(file)
-            else:
-                #print(file+":"+checksumdir.dirhash(file))
-                dir_str = dir_str+","+str(file)+":"+checksumdir.dirhash(file)
+            if not file.startswith('authenticate') and not file.startswith('downloader') and not file.startswith('sr') and not file.startswith('basichttpserver'):
+                if not os.path.isdir(file):
+                    #print(file+":"+md5sum(file))
+                    dir_str = dir_str+","+str(file)+":"+md5sum(file)
+                else:
+                    #print(file+":"+checksumdir.dirhash(file))
+                    dir_str = dir_str+","+str(file)+":"+checksumdir.dirhash(file)
+
         response = requests.post("http://"+localhost+"/direcctorylist.php", data = {'list':dir_str,'username':username,'ipaddr':ipaddr,'location':os.getcwd(),'server_user':server_user,'server_pass':server_pass,'port':port})
         #downloader()
 
