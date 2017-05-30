@@ -8,6 +8,17 @@ server_pass = data[1].strip('Password:').strip('\n')
 port = int(data[2].strip('Port:').strip('\n'))
 localhost = data[3].strip('Localhost:').strip('\n')
 status = 0 #Server is Offline
+"""def lister(dir_name):
+    os.chdir(dir_name)
+    dirs = os.listdir(os.getcwd())
+    for file in dirs:
+        if not file.startswith('authenticate') and not file.startswith('downloader') and not file.startswith('sr') and not file.startswith('basichttpserver') and not file.startswith('.'):
+            if not os.path.isdir(file) and os.path.isfile(file):
+                print(str(file)+":"+md5sum(file))
+            elif os.path.isdir(file):
+                print(str(file)+":"+checksumdir.dirhash(file))
+                lister(file)
+"""
 def my_ip():
     s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
     s.connect(('192.0.0.2',1027))
@@ -72,6 +83,7 @@ while auth != 1 and attempts != 0:
         #port = random.randint(6000,7000)
         #dirs = os.listdir(os.getcwd())
         #str_dir = str(dirs)
+        #lister(os.getcwd())
         dir_list = os.listdir(os.getcwd())
         dir_str = ""
         for file in dir_list:
