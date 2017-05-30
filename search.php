@@ -20,7 +20,8 @@ while($row = mysqli_fetch_array($result))
 {
   $name = $row['name'];
   $hash = $row['hash'];
-  echo "<a href=\"http://192.168.0.8/Offline/postman.php?hash=$hash\">$name</a> <br>";
+  $host = $row['username'];
+  echo "From: $host <a href=\"http://192.168.0.8/Offline/postman.php?hash=$hash\">$name</a> <br>";
 }
 }
 else {

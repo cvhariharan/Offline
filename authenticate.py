@@ -30,7 +30,7 @@ def md5sum(filename):
         break
       d.update(buf)
     return d.hexdigest()
-
+#Add Server creator to constantly check for server status and start it.
 def server_status():
     try:
         r = requests.get("http://"+server_user+":"+server_pass+"@localhost:"+str(port))
