@@ -39,7 +39,7 @@ def decodeAnddownload(fname):
         name = urllib.quote(name)
         server = dns(servername)
         print(server)
-        download_com = "wget http://"+server_user+":"+server_pass+"@"+server+":"+port+"/"+name
+        download_com = "wget http://"+server_user+":"+server_pass+"@"+server+":"+port+name
         #print(download_com)
         os.system(download_com)
         #print(name)
