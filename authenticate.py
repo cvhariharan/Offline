@@ -36,8 +36,7 @@ if server_status() == 0:
     #download_thread.start()
 
     server_thread.start()
-    server_thread.join(15)
-
+    server_thread.join(2)
 auth = 0
 attempts = 5
 while auth != 1 and attempts != 0:
