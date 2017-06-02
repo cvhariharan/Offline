@@ -6,8 +6,8 @@ def md5sum(filename):
     d = xxhash.xxh64()
     i=0;
     mid = int((os.path.getsize(filename))/2)
+    f.seek(mid)
     while i < 25:
-        f.seek(mid)
         buf = f.read(8192) # 128 is smaller than the typical filesystem block
         if not buf:
             break
