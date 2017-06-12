@@ -1,5 +1,5 @@
 import os,urllib3,urllib
-import base64
+import base64,sys
 from Crypto.Cipher import AES
 server_conf = open("sr.conf","r")
 data = server_conf.readlines()
@@ -50,7 +50,8 @@ def decodeAnddownload(fname):
         #print(md5hash)
     elif fname != "exit":
         print("No such file found!")
+        sys.exit(0)
 fname = ""
 while fname != "exit":
-    fname = raw_input("Name of the file (Type exit to exit): ")
+    fname = sys.argv[1] #raw_input("Name of the file (Type exit to exit): ")
     decodeAnddownload(fname)

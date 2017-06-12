@@ -18,7 +18,8 @@ def basichttpserver(port,username,password):
     output = os.system(server_command)
 
 def downloader():
-    com = "python downloader.py"
+    hv_file = input("Name of the hv file: ")
+    com = "python downloader.py "+ hv_file
     os.system(com)
 
 def server_status():
