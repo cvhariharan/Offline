@@ -14,7 +14,7 @@ def my_ip():
     return s.getsockname()[0]
 
 def basichttpserver(port,username,password):
-    server_command = "./Server --username "+server_user+" --password "+server_pass+" -p "+str(port)
+    server_command = "./Server --username "+server_user+" --password "+server_pass+" -p "+str(port)+" > server.log"
     output = os.system(server_command)
 
 def downloader():
