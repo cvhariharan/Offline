@@ -48,13 +48,15 @@ while auth != 1 and attempts != 0:
     if r.text == '1':
         print ("Authentication Successful!")
         auth = 1
-        dir_str = " "
-        os.system("python3 directory_lister.py")
-        file_dat = open("files.dat","r")
-        all_files = file_dat.readlines()
-        for files in all_files:
-            dir_str = dir_str + "," + (files.replace(str(os.getcwd()),""))
-        response = requests.post("http://"+localhost+"/direcctorylist.php", data = {'list':dir_str,'username':username,'ipaddr':ipaddr,'location':os.getcwd(),'server_user':server_user,'server_pass':server_pass,'port':port})
+        if server_status == 0:    #Only send the directory list for the first instance of user login. The server starts only during the first instance.
+            dir_str = " "
+            os.system("python3 directory_lister.py")
+            file_dat = open("files.dat","r")
+            all_files = file_dat.readlines()
+            for files in all_files:
+                dir_str = dir_str + "," + (files.replace(str(os.getcwd()),""))
+            response = requests.post("http://"+localhost+"/direcctorylist.php", data = {'list':dir_str,'username':username,'ipaddr':ipaddr,'location':os.getcwd(),'server_user':server_user,'server_pass':server_pass,'port':port})
+
         #os.remove("files.dat")
         #downloader()
         #print(dir_str)

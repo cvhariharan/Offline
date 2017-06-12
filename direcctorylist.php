@@ -13,6 +13,8 @@ $files = explode(",",$json_data);
 echo "<pre>";
 print_r($files);
 echo "</pre>";
+$delete = "DELETE FROM files WHERE ip = \"$ipaddr\"";
+$del_result = mysqli_query($link,$delete);
 foreach ($files as $file)
 {
   $file_split = explode(":",$file);
