@@ -2,6 +2,7 @@
 <head>
   <title>Offl!ne</title>
   <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Overpass" rel="stylesheet">
   <link href="index.css" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
