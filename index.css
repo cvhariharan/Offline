@@ -1,0 +1,41 @@
+h2{
+      
+      font-family: 'Luckiest Guy', cursive;
+      font-size: 64px;
+}
+body {
+  background-color: #6877ff;
+
+}
+input[type=text]{
+
+  margin: 8px 0;
+
+  border: 2px solid black;
+  background-color:#6877ff;
+  width: 600px;
+  height: 50px;
+  font-size: 28px;
+}
+input[type=text]:focus{
+  border: 2px solid black;
+}
+* {
+    box-sizing: border-box;
+}
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+[class*="col-"] {
+    float: left;
+    padding: 15px;
+  }
