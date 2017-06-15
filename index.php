@@ -9,10 +9,25 @@
 
 <body>
 <div class="navbar">
-<ul align="right">
-  <li><a href="login.php">Login</a></li>
-  <li><a href="signup.php">Signup</a></li>
-</ul>
+  <?php
+  session_start();
+  $username = $_SESSION['username'];
+  $logged = "<ul align=\"right\">
+    <li><a href=\"#\">Hello $username!</a></li>
+  </ul>";
+  $not_logged = "<ul align=\"right\">
+    <li><a href=\"login.php\">Login</a></li>
+    <li><a href=\"signup.php\">Signup</a></li>
+  </ul>";
+  if(isset($_SESSION['login']) && $_SESSION['login']==5)
+  {
+    echo $logged;
+  }
+  else {
+    echo $not_logged;
+  }
+  ?>
+
 </div>
 <div class="offline">
 <h2>Offl!ne.</h2></div>
