@@ -1,9 +1,17 @@
+@font-face {
+  font-family: 'LuckiestGuy';
+  src: url('LuckiestGuy.ttf');
+}
+@font-face {
+  font-family: 'Overpass';
+  src: url('Overpass-Regular.ttf');
+}
 .offline{
   padding-top: 150px;
       width: 15%;
       margin: 0 auto;
-      font-family: 'Luckiest Guy', cursive;
-      font-size: 48px;
+      font-family: 'LuckiestGuy', cursive;
+      font-size: 68px;
 }
 body {
   background-color: #f9f03b;
@@ -11,9 +19,18 @@ body {
 input[type=text]{
   border: 2px solid black;
   background-color:#f9f03b;
-  width: 550px;
-  height: 40px;
+  width: 600px;
+  height: 50px;
   font-size: 28px;
+}
+input[type=submit]{
+  border: 2px solid black;
+  padding-top: 4px;
+  width: 130px;
+  height: 35px;
+  font-size: 24px;
+  font-family: 'LuckiestGuy', cursive;
+  background-color:#f9f03b;
 }
 input[type=text]:focus{
   border: 2px solid black;
@@ -26,5 +43,15 @@ input[type=text]:focus{
 a{
   font-family: 'Overpass', sans-serif;
   color: black;
-  text-decoration: none;
+  text-decoration: underline;
+}
+.heading {
+  font-family: 'LuckiestGuy', cursive;
+  font-size: 48px;
+}
+.links
+{
+  font-family: 'Overpass', sans-serif;
+  color: black;
+  font-size: 30px;
 }
