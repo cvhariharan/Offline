@@ -1,5 +1,5 @@
 import requests, time, threading,_thread,xxhash
-import hashlib,checksumdir
+import hashlib
 import os, sys, socket, json, random, string
 server_conf = open("sr.conf","r")
 data = server_conf.readlines()
