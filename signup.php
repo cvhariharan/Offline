@@ -6,6 +6,8 @@
 </form></table></center>
 
 <?php
+$current_file = __FILE__;
+require "analytics.php";
 require "database.php";
 $ipaddr = $_SERVER['REMOTE_ADDR'];
 $username = $_POST["username"];

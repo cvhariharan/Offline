@@ -1,7 +1,9 @@
 <?php
 set_time_limit(0);
-require "database.php";
 session_start();
+$current_file = __FILE__;
+require "analytics.php";
+require "database.php";
 $_SESSION['login'] = 5;
 $username = $_POST['username'];
 $passw = $_POST['passw'];

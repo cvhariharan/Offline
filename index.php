@@ -9,6 +9,8 @@
 <div class="navbar">
   <?php
   session_start();
+  $current_file = __FILE__;
+  require "analytics.php";
   $username = $_SESSION['username'];
   $logged = "<ul align=\"right\">
     <li><a href=\"#\">Hello $username!</a></li>

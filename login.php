@@ -12,6 +12,8 @@
 </html>
 <?php
 set_time_limit(0);
+$current_file = __FILE__;
+require "analytics.php";
 require "database.php";
 session_start();
 

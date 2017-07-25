@@ -11,6 +11,8 @@
 
 </form></center>
 <?php
+$current_file = __FILE__;
+require "analytics.php";
 require 'database.php';
 session_start();
 if(isset($_SESSION['login']) && $_SESSION['login']==5)
