@@ -30,21 +30,37 @@ def server_status():
     except requests.exceptions.RequestException as e:
         status = 0
     return status
+
+def select_choice():
+    while True:
+        if auth == 1:
+            print("1.Download\n2.Add Directory\n")
+            choice = str(input("Enter 1 or 2 and exit to exit: "))
+            if choice == "1":
+                downloader()
+            if choice == "2":
+                os.system("python3 symlink_adder.py")
+            if choice == "exit":
+                break;
+            else:
+                print("Invalid selection!")
+        else:
+            sys.exit(0)
+
+
 headers = {'content-type': 'application/json'}
 if server_status() == 0:
     server_thread = threading.Thread(target=basichttpserver,args=(port,server_user,server_pass,))
     server_thread.setDaemon(True)
-    #download_thread.start()
-
     server_thread.start()
     server_thread.join(2)
 auth = 0
 attempts = 5
+#Authentication
 while auth != 1 and attempts != 0:
     username = input("Username: ")
     password = input("Password: ")
     ipaddr = my_ip()
-    #print("http://"+localhost+"/auth.php")
     r = requests.post("http://"+localhost+"/auth.php", data = {'username':username, 'passw':password, 'ipaddr':ipaddr})
     if r.text == '1':
         print ("Authentication Successful!")
@@ -56,14 +72,13 @@ while auth != 1 and attempts != 0:
         for files in all_files:
             dir_str = dir_str + "," + (files.replace(str(os.getcwd()),""))
         response = requests.post("http://"+localhost+"/direcctorylist.php", data = {'list':dir_str,'username':username,'ipaddr':ipaddr,'location':os.getcwd(),'server_user':server_user,'server_pass':server_pass,'port':port})
+        break;
 
-        #os.remove("files.dat")
-        #downloader()
-        #print(dir_str)
-        downloader()
     elif attempts != 0:
         if attempts != 1:
             print("Authentication Failed! Try Again.")
         attempts-=1
         print("Attemps remaining "+str(attempts))
-sys.exit(0)
+    break;
+
+select_choice()
