@@ -1,4 +1,4 @@
-import os,hashlib,checksumdir,glob,_thread,xxhash,json
+import os,hashlib,glob,_thread,xxhash,json
 #from datetime import datetime
 #The following function does not generate md5 hash. It uses xxhash. The entire file is not hashed. Only 25 chunks of 8k from the middle is hashed.
 def md5sum(filename):
