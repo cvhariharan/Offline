@@ -34,7 +34,7 @@ if($result)
 }
 else
 {
-	echo $result."<br>";
+	//echo $result."<br>";
 	echo "Some error in signing up! Try again later.";
 }
 }
@@ -45,7 +45,7 @@ else
 	echo "Username not available. Sign up again with another username.";
 }
 
-/*function random_string($length = 32) 
+/*function random_string($length = 32)
 {
     return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
 }*/
