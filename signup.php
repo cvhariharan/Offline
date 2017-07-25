@@ -23,8 +23,8 @@ if(empty($rowu['username']))
 {
 if($password==$password1)
 {
-$server_user = random_string(6);
-$server_pass = random_string(8);
+//$server_user = random_string(6);
+//$server_pass = random_string(8);
 $sql = "INSERT INTO users (username,passw,ip) VALUES (\"$username\",\"$password\",\"$ipaddr\")";
 $result = mysqli_query($link,$sql);
 if($result)
@@ -33,7 +33,10 @@ if($result)
 	echo "Successfully signed up!Now login from the client on your pc.<a href=\"clienthelp.php\">How to use the client software?</a>";
 }
 else
+{
+	echo $result."<br>";
 	echo "Some error in signing up! Try again later.";
+}
 }
 else
 	echo "Passwords don't match. Try again.";
@@ -42,7 +45,9 @@ else
 	echo "Username not available. Sign up again with another username.";
 }
 
-function random_string($length = 32) {
+/*function random_string($length = 32) 
+{
     return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
-}
+}*/
+
 ?>
