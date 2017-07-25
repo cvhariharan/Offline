@@ -8,4 +8,3 @@ Offline is a peer-to-peer file tranfer utility.
 ## Todo
 There are a lot improvements yet to be made. 
 - Make login and signup pages more secure.
-- Create a new downloader. (At present I have used wget to get the job done and for testing purposes but I will develop a multi-threaded downloader specifically designed for offline.)
