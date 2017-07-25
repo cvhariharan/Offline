@@ -38,8 +38,11 @@ def select_choice():
             choice = str(input("Enter 1 or 2 and exit to exit: "))
             if choice == "1":
                 downloader()
+                continue;
             if choice == "2":
                 os.system("python3 symlink_adder.py")
+                send_directory()
+                continue
             if choice == "exit":
                 break;
             else:
@@ -47,6 +50,14 @@ def select_choice():
         else:
             sys.exit(0)
 
+def send_directory():
+    os.system("python3 directory_lister.py")
+    file_dat = open("files.dat","r")
+    all_files = file_dat.readlines()
+    dir_str = " "
+    for files in all_files:
+        dir_str = dir_str + "," + (files.replace(str(os.getcwd()),""))
+    response = requests.post("http://"+localhost+"/direcctorylist.php", data = {'list':dir_str,'username':username,'ipaddr':ipaddr,'location':os.getcwd(),'server_user':server_user,'server_pass':server_pass,'port':port})
 
 headers = {'content-type': 'application/json'}
 if server_status() == 0:
@@ -65,13 +76,7 @@ while auth != 1 and attempts != 0:
     if r.text == '1':
         print ("Authentication Successful!")
         auth = 1
-        dir_str = " "
-        os.system("python3 directory_lister.py")
-        file_dat = open("files.dat","r")
-        all_files = file_dat.readlines()
-        for files in all_files:
-            dir_str = dir_str + "," + (files.replace(str(os.getcwd()),""))
-        response = requests.post("http://"+localhost+"/direcctorylist.php", data = {'list':dir_str,'username':username,'ipaddr':ipaddr,'location':os.getcwd(),'server_user':server_user,'server_pass':server_pass,'port':port})
+        send_directory()
         break;
 
     elif attempts != 0:

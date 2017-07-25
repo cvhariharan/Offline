@@ -8,7 +8,7 @@ def md5sum(filename):
     mid = int((os.path.getsize(filename))/2)
     f.seek(mid)
     while i < 25:
-        buf = f.read(8192) # 128 is smaller than the typical filesystem block
+        buf = f.read(8192)
         if not buf:
             break
         d.update(buf)
@@ -25,7 +25,7 @@ def dir_hash(dir_name):
     hashes = str(xxhash.xxh64(hashes).hexdigest()).strip("b").strip("\'")
     last_modified = os.path.getmtime(dir_name)
     f.write(dir_name+":"+hashes+'\r\n')
-def lister(dir_name):
+def lister(dir_name): #Lists all the files and folders in the current working directory
     for root, dirs, files in os.walk(dir_name, topdown=False):
         for name in files:
             #dir_str = dir_str + os.path.join(root, name)
@@ -34,6 +34,11 @@ def lister(dir_name):
             #dir_str = dir_str + os.path.join(root, name)
             #last_modified = os.path.getmtime(os.path.join(root, name))
             #f.write(name+":"+str(last_modified)+",")
+            #Check if the directory is list and if true, traverse it
+            if os.path.islink(name):
+                #print(os.readlink(dir_name))
+                lister(os.readlink(name)) #Returns the real path of name to lister
             dir_hash(os.path.join(root,name))
-    f.close()
+
 lister(os.getcwd())
+f.close()
