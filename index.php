@@ -13,7 +13,7 @@
   require "analytics.php";
   $username = $_SESSION['username'];
   $logged = "<ul align=\"right\">
-    <li><a href=\"#\">Hello $username!</a></li>
+    <li><a href=\"logout.php\">Hello $username!</a></li>
   </ul>";
   $not_logged = "<ul align=\"right\">
     <li><a href=\"login.php\">Login</a></li>
