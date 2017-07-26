@@ -2,18 +2,23 @@ import os,hashlib,glob,_thread,xxhash,json
 #from datetime import datetime
 #The following function does not generate md5 hash. It uses xxhash. The entire file is not hashed. Only 25 chunks of 8k from the middle is hashed.
 def md5sum(filename):
-  with open(filename, mode='rb') as f:
-    d = xxhash.xxh64()
-    i=0;
-    mid = int((os.path.getsize(filename))/2)
-    f.seek(mid)
-    while i < 25:
-        buf = f.read(8192)
-        if not buf:
-            break
-        d.update(buf)
-        i+=1
-    return str(d.hexdigest()).strip("b").strip("\'")
+    try:
+         with open(filename, mode='rb') as f:
+           d = xxhash.xxh64()
+           i=0;
+           mid = int((os.path.getsize(filename))/2)
+           f.seek(mid)
+           while i < 25:
+               buf = f.read(8192)
+               if not buf:
+                   break
+               d.update(buf)
+               i+=1
+           return str(d.hexdigest()).strip("b").strip("\'")
+    except FileNotFoundError:
+        blank = ""
+        return blank
+
 f = open("files.dat","w")
 def file_hash(dir_name):
     f.write(dir_name+":"+md5sum(dir_name)+'\r\n')
@@ -27,6 +32,8 @@ def dir_hash(dir_name):
     f.write(dir_name+":"+hashes+'\r\n')
 def lister(dir_name): #Lists all the files and folders in the current working directory
     for root, dirs, files in os.walk(dir_name, topdown=False):
+        files = [f for f in files if not f[0] == '.']
+        dirs[:] = [d for d in dirs if not d[0] == '.']
         for name in files:
             #dir_str = dir_str + os.path.join(root, name)
             _thread.start_new_thread(file_hash,(os.path.join(root,name),))

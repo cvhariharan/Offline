@@ -45,13 +45,13 @@ def select_choice():
             choice = str(input("Enter 1 or 2 and exit to exit: "))
             if choice == "1":
                 downloader()
-                continue;
+                continue
             if choice == "2":
                 os.system("python3 symlink_adder.py")
                 send_directory()
                 continue
             if choice == "exit":
-                break;
+                break
             else:
                 print("Invalid selection!")
         else:
