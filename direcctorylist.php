@@ -19,8 +19,10 @@ foreach ($files as $file)
 {
   $file_split = explode(":",$file);
   $hash =  $file_split[1];
-  $name = $file_split[0];
-  $sql = "INSERT INTO `files`(`name`, `location`, `ip`, `username`, `server_user`, `server_pass`, `port`,`hash`) VALUES (\"$name\",\"$location\",\"$ipaddr\",\"$username\",\"$server_user\",\"$server_pass\",\"$port\",\"$hash\")";
+  $loc = $file_split[0];
+  $name_ = explode("/",$file_split[0])
+  $name = $name_(count($name_)-1)
+  $sql = "INSERT INTO `files`(`name`, `location`, `ip`, `username`, `server_user`, `server_pass`, `port`,`hash`) VALUES (\"$name\",\"$loc\",\"$ipaddr\",\"$username\",\"$server_user\",\"$server_pass\",\"$port\",\"$hash\")";
   $result = mysqli_query($link,$sql);
 }
 ?>

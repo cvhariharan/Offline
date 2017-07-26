@@ -18,5 +18,8 @@ if($row['username'] == $username)
 	echo "1";
 	exit;
 }
+else {
+	echo "0";
+}
 }
 ?>
