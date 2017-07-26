@@ -32,6 +32,7 @@ def check_symlinks():
         path_breakdown = data[i].strip("/")
         symlink = path_breakdown[(len(path_breakdown)-1)]
         if not os.path.islink(os.getcwd()+"/"+symlink):
+            #print(os.getcwd()+"/"+symlink)
             data[i] = ""
         i += 1
     server_conf = open("sr.conf","w")
@@ -45,13 +46,13 @@ def select_choice():
             choice = str(input("Enter 1 or 2 and exit to exit: "))
             if choice == "1":
                 downloader()
-                continue
+                continue;
             if choice == "2":
                 os.system("python3 symlink_adder.py")
                 send_directory()
                 continue
             if choice == "exit":
-                break
+                break;
             else:
                 print("Invalid selection!")
         else:

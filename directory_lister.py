@@ -8,8 +8,8 @@ def md5sum(filename):
            i=0;
            mid = int((os.path.getsize(filename))/2)
            f.seek(mid)
-           while i < 25:
-               buf = f.read(8192)
+           while i < 18:
+               buf = f.read(1024)
                if not buf:
                    break
                d.update(buf)
