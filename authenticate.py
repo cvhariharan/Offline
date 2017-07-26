@@ -1,13 +1,7 @@
 import requests, time, threading,_thread,xxhash
 import hashlib
 import os, sys, socket, json, random, string
-server_conf = open("sr.conf","r")
-data = server_conf.readlines()
-server_user = data[0].strip('Username:').strip('\n')
-server_pass = data[1].strip('Password:').strip('\n')
-port = int(data[2].strip('Port:').strip('\n'))
-localhost = data[3].strip('Localhost:').strip('\n')
-status = 0 #Server is Offline
+
 def my_ip():
     s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
     s.connect(('192.0.0.2',1027))
@@ -30,6 +24,19 @@ def server_status():
     except requests.exceptions.RequestException as e:
         status = 0
     return status
+
+def check_symlinks():
+    no_of_links = len(data)
+    i = 4
+    while i < no_of_links:
+        path_breakdown = data[i].strip("/")
+        symlink = path_breakdown[(len(path_breakdown)-1)]
+        if not os.path.islink(os.getcwd()+"/"+symlink):
+            data[i] = ""
+        i += 1
+    server_conf = open("sr.conf","w")
+    server_conf.writelines(data)
+
 
 def select_choice():
     while True:
@@ -58,6 +65,17 @@ def send_directory():
     for files in all_files:
         dir_str = dir_str + "," + (files.replace(str(os.getcwd()),""))
     response = requests.post("http://"+localhost+"/direcctorylist.php", data = {'list':dir_str,'username':username,'ipaddr':ipaddr,'location':os.getcwd(),'server_user':server_user,'server_pass':server_pass,'port':port})
+
+server_conf = open("sr.conf","r")
+data = server_conf.readlines()
+server_user = data[0].strip('Username:').strip('\n')
+server_pass = data[1].strip('Password:').strip('\n')
+port = int(data[2].strip('Port:').strip('\n'))
+localhost = data[3].strip('Localhost:').strip('\n')
+server_conf.close()
+status = 0 #Server is Offline
+
+check_symlinks()
 
 headers = {'content-type': 'application/json'}
 if server_status() == 0:
