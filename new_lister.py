@@ -21,7 +21,7 @@ def md5sum(filename):
         return blank
 
 def file_hash(dir_name):
-    print(dir_name)
+    #print(dir_name)
     mtime = os.path.getmtime(dir_name)
     fname = dir_name.split("/")[(len(dir_name.split("/"))-1)]
     hashed = md5sum(dir_name)
@@ -34,6 +34,7 @@ def file_hash(dir_name):
     #print(fname+"-->"+str(mtime))
     #f.write(dir_name+":"+hashed+'\r\n')
 def dir_hash(dir_name):
+    #print(dir_name)
     hashes = ""
     for root, dirs, files in os.walk(dir_name, topdown=False):
         for name in files:
@@ -55,12 +56,15 @@ def dir_hash(dir_name):
 formats = [".jpg",".png",".avi",".mp4",".mp3",".mkv",".zip",".rar"]
 test_block = {}
 if os.path.isfile("files.json"):
+    #print("File Found.")
     fr = open("files.json","r")
     all_files = fr.read()
     test_block = json.loads(all_files)
     fr.close()
+    #print(test_block)
     for dirs in glob.iglob(os.getcwd()+"/**/",recursive=True): #Only directories
         try:
+            #print(test_block[dirs])
             now_mtime = os.path.getmtime(dirs)
             pre_mtime = test_block[dirs]['mtime']
             if now_mtime != pre_mtime:
@@ -71,6 +75,7 @@ if os.path.isfile("files.json"):
     for extension in formats: #Only the files with give formats
         for filename in glob.iglob(os.getcwd()+"/**/*"+extension,recursive=True):
             try:
+                #print(test_block[filename])
                 now_mtime = os.path.getmtime(filename)
                 pre_mtime = test_block[filename]['mtime']
                 if now_mtime != pre_mtime:
@@ -80,22 +85,22 @@ if os.path.isfile("files.json"):
     indexed = test_block.keys()
     to_remove = []
     for each_indexed in indexed: #Checks for deleted files and removes them from the index
-        if not os.path.isfile(each_indexed) or os.path.isdir(each_indexed):
+        if not os.path.exists(each_indexed):
             to_remove.append(each_indexed)
+            #print("Each_Indexed: "+each_indexed)
 
     for each_remove in to_remove:
+        #print("Each_Remove: "+each_remove)
         test_block.pop(each_remove,None)
-    master_block = test_block
+
 
 else:
     for dirs in glob.iglob(os.getcwd()+"/**/",recursive=True): #Only directories
         dir_hash(dirs)
-        master_block = test_block
     for extension in formats: #Only the files with give formats
         for filename in glob.iglob(os.getcwd()+"/**/*"+extension,recursive=True):
             file_hash(filename)
-            master_block.update(test_block)
-json_h = json.dumps(master_block)
+json_h = json.dumps(test_block)
 #print(json_h)
 f = open("files.json","w")
 #print(master_block)
