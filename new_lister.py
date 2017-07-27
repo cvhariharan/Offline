@@ -21,6 +21,7 @@ def md5sum(filename):
         return blank
 
 def file_hash(dir_name):
+    print(dir_name)
     mtime = os.path.getmtime(dir_name)
     fname = dir_name.split("/")[(len(dir_name.split("/"))-1)]
     hashed = md5sum(dir_name)
@@ -47,11 +48,13 @@ def dir_hash(dir_name):
     block['hash'] = hashes
     block['dir'] = True
     test_block[dir_name] = block
+    #print(test_block[dir_name])
     #print(fname+"-->"+str(mtime))
     #f.write(dir_name+":"+hashes+'\r\n')
-formats = [".jpg",".png",".avi",".mp4",".mp3",".mkv",".zip",".rar",".py"]
+
+formats = [".jpg",".png",".avi",".mp4",".mp3",".mkv",".zip",".rar"]
 test_block = {}
-try:
+if os.path.isfile("files.json"):
     fr = open("files.json","r")
     all_files = fr.read()
     test_block = json.loads(all_files)
@@ -82,16 +85,18 @@ try:
 
     for each_remove in to_remove:
         test_block.pop(each_remove,None)
-        
-except FileNotFoundError:
+    master_block = test_block
+
+else:
     for dirs in glob.iglob(os.getcwd()+"/**/",recursive=True): #Only directories
         dir_hash(dirs)
+        master_block = test_block
     for extension in formats: #Only the files with give formats
         for filename in glob.iglob(os.getcwd()+"/**/*"+extension,recursive=True):
             file_hash(filename)
-
-json_h = json.dumps(test_block)
-print(json_h)
+            master_block.update(test_block)
+json_h = json.dumps(master_block)
+#print(json_h)
 f = open("files.json","w")
 #print(master_block)
 f.write(str(json_h))
