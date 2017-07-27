@@ -103,6 +103,6 @@ while auth != 1 and attempts != 0:
             print("Authentication Failed! Try Again.")
         attempts-=1
         print("Attemps remaining "+str(attempts))
-    
+
 
 select_choice()
