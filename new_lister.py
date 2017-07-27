@@ -1,6 +1,5 @@
-import fnmatch
 import os,glob
-import hashlib,glob,_thread,xxhash,json
+import hashlib,_thread,xxhash,json
 #from datetime import datetime
 #The following function does not generate md5 hash. It uses xxhash. The entire file is not hashed. Only 18 chunks of 8k from the middle is hashed.
 def md5sum(filename):
@@ -30,7 +29,7 @@ def file_hash(dir_name):
     block['mtime'] = mtime
     block['hash'] = hashed
     block['dir'] = False
-    master_block[dir_name] = block
+    test_block[dir_name] = block
     #print(fname+"-->"+str(mtime))
     #f.write(dir_name+":"+hashed+'\r\n')
 def dir_hash(dir_name):
@@ -47,18 +46,53 @@ def dir_hash(dir_name):
     block['mtime'] = mtime
     block['hash'] = hashes
     block['dir'] = True
-    master_block[dir_name] = block
+    test_block[dir_name] = block
     #print(fname+"-->"+str(mtime))
     #f.write(dir_name+":"+hashes+'\r\n')
+formats = [".jpg",".png",".avi",".mp4",".mp3",".mkv",".zip",".rar",".py"]
+test_block = {}
+try:
+    fr = open("files.json","r")
+    all_files = fr.read()
+    test_block = json.loads(all_files)
+    fr.close()
+    for dirs in glob.iglob(os.getcwd()+"/**/",recursive=True): #Only directories
+        try:
+            now_mtime = os.path.getmtime(dirs)
+            pre_mtime = test_block[dirs]['mtime']
+            if now_mtime != pre_mtime:
+                dir_hash(dirs)
+        except KeyError:
+            dir_hash(dirs)
 
+    for extension in formats: #Only the files with give formats
+        for filename in glob.iglob(os.getcwd()+"/**/*"+extension,recursive=True):
+            try:
+                now_mtime = os.path.getmtime(filename)
+                pre_mtime = test_block[filename]['mtime']
+                if now_mtime != pre_mtime:
+                    file_hash(filename)
+            except KeyError:
+                file_hash(filename)
+    indexed = test_block.keys()
+    to_remove = []
+    for each_indexed in indexed: #Checks for deleted files and removes them from the index
+        if not os.path.isfile(each_indexed) or os.path.isdir(each_indexed):
+            to_remove.append(each_indexed)
+
+    for each_remove in to_remove:
+        test_block.pop(each_remove,None)
+        
+except FileNotFoundError:
+    for dirs in glob.iglob(os.getcwd()+"/**/",recursive=True): #Only directories
+        dir_hash(dirs)
+    for extension in formats: #Only the files with give formats
+        for filename in glob.iglob(os.getcwd()+"/**/*"+extension,recursive=True):
+            file_hash(filename)
+
+json_h = json.dumps(test_block)
+print(json_h)
 f = open("files.json","w")
-master_block = {}
-formats = [".jpg",".png",".avi",".mp4",".mp3",".mkv",".zip",".rar"]
-for dirs in glob.iglob(os.getcwd()+"/**/",recursive=True): #Only directories
-    dir_hash(dirs)
-for extension in formats: #Only the files with give formats
-    for filename in glob.iglob(os.getcwd()+"/**/*"+extension,recursive=True):
-        file_hash(filename)
-json_d = json.dumps(master_block)
-print(json_d)
-f.write(json_d)
+#print(master_block)
+f.write(str(json_h))
+f.close()
