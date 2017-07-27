@@ -3,7 +3,7 @@ import os,glob
 import hashlib,glob,_thread,xxhash,json
 #from datetime import datetime
 #The following function does not generate md5 hash. It uses xxhash. The entire file is not hashed. Only 18 chunks of 8k from the middle is hashed.
-"""def md5sum(filename):
+def md5sum(filename):
     try:
          with open(filename, mode='rb') as f:
            d = xxhash.xxh64()
@@ -21,9 +21,18 @@ import hashlib,glob,_thread,xxhash,json
         blank = ""
         return blank
 
-f = open("files.dat","w")
 def file_hash(dir_name):
-    f.write(dir_name+":"+md5sum(dir_name)+'\r\n')
+    mtime = os.path.getmtime(dir_name)
+    fname = dir_name.split("/")[(len(dir_name.split("/"))-1)]
+    hashed = md5sum(dir_name)
+    block = {}
+    block['name'] = fname
+    block['mtime'] = mtime
+    block['hash'] = hashed
+    block['dir'] = False
+    master_block[dir_name] = block
+    #print(fname+"-->"+str(mtime))
+    #f.write(dir_name+":"+hashed+'\r\n')
 def dir_hash(dir_name):
     hashes = ""
     for root, dirs, files in os.walk(dir_name, topdown=False):
@@ -31,12 +40,25 @@ def dir_hash(dir_name):
             hashes = hashes+md5sum(os.path.join(root,name))
     hashes = str(xxhash.xxh64(hashes).hexdigest()).strip("b").strip("\'")
     last_modified = os.path.getmtime(dir_name)
-    f.write(dir_name+":"+hashes+'\r\n')
-    """
+    mtime = os.path.getmtime(dir_name)
+    fname = dir_name.split("/")[(len(dir_name.split("/"))-2)] #For directories the format is /path/to/dir_name/
+    block = {}
+    block['name'] = fname
+    block['mtime'] = mtime
+    block['hash'] = hashes
+    block['dir'] = True
+    master_block[dir_name] = block
+    #print(fname+"-->"+str(mtime))
+    #f.write(dir_name+":"+hashes+'\r\n')
+
+f = open("files.json","w")
+master_block = {}
 formats = [".jpg",".png",".avi",".mp4",".mp3",".mkv",".zip",".rar"]
-for dirs in glob.iglob("./**/",recursive=True): #Only directories
-    print(dirs)
+for dirs in glob.iglob(os.getcwd()+"/**/",recursive=True): #Only directories
+    dir_hash(dirs)
 for extension in formats: #Only the files with give formats
-    for filename in glob.iglob("./**/*"+extension,recursive=True):
-        #fhash = file_hash(os.path.join(os.getcwd(),filename))
-        print(filename)#)":"+str(fhash))
+    for filename in glob.iglob(os.getcwd()+"/**/*"+extension,recursive=True):
+        file_hash(filename)
+json_d = json.dumps(master_block)
+print(json_d)
+f.write(json_d)
