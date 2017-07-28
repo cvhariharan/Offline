@@ -1,3 +1,6 @@
+#Deprecated version. Now switched to new_lister.py
+
+#Just kept for reference purposes.
 import os,hashlib,glob,_thread,xxhash,json
 #from datetime import datetime
 #The following function does not generate md5 hash. It uses xxhash. The entire file is not hashed. Only 18 chunks of 8k from the middle is hashed.
