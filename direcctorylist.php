@@ -1,4 +1,5 @@
 <?php
+set_time_limit(0);
 require "database.php";
 $d = file_get_contents("php://input");
 $json = json_decode($d, true);
