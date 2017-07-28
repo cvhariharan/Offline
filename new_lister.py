@@ -29,7 +29,7 @@ def file_hash(dir_name):
     block['name'] = fname
     block['mtime'] = mtime
     block['hash'] = hashed
-    block['dir'] = False
+    block['dir'] = "False"
     test_block[dir_name] = block
     #print(fname+"-->"+str(mtime))
     #f.write(dir_name+":"+hashed+'\r\n')
@@ -47,7 +47,7 @@ def dir_hash(dir_name):
     block['name'] = fname
     block['mtime'] = mtime
     block['hash'] = hashes
-    block['dir'] = True
+    block['dir'] = "True"
     test_block[dir_name] = block
     #print(test_block[dir_name])
     #print(fname+"-->"+str(mtime))
@@ -100,7 +100,7 @@ else:
     for extension in formats: #Only the files with give formats
         for filename in glob.iglob(os.getcwd()+"/**/*"+extension,recursive=True):
             file_hash(filename)
-json_h = json.dumps(test_block)
+json_h = json.dumps(test_block,separators=(',',':')) #Remove whitespaces
 #print(json_h)
 f = open("files.json","w")
 #print(master_block)
