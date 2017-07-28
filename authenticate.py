@@ -59,13 +59,19 @@ def select_choice():
             sys.exit(0)
 
 def send_directory():
-    os.system("python3 directory_lister.py")
-    file_dat = open("files.dat","r")
-    all_files = file_dat.readlines()
-    dir_str = " "
-    for files in all_files:
-        dir_str = dir_str + "," + (files.replace(str(os.getcwd()),""))
-    response = requests.post("http://"+localhost+"/direcctorylist.php", data = {'list':dir_str,'username':username,'ipaddr':ipaddr,'location':os.getcwd(),'server_user':server_user,'server_pass':server_pass,'port':port})
+    os.system("python3 new_lister.py")
+    file_dat = open("files.json","r")
+    all_files = file_dat.read()
+    dir_block = json.loads(all_files)
+    block = {}
+    block['username'] = username
+    block['ipaddr'] = ipaddr
+    block['server_user'] = server_user
+    block['server_pass'] = server_pass
+    block['port'] = port
+    dir_block["me"] = block
+    json_dirs = json.dumps(dir_block,separators=(',',':')) #Remove whitespaces
+    response = requests.post("http://localhost/Offline/direcctorylist.php", data = json_dirs)
 
 server_conf = open("sr.conf","r")
 data = server_conf.readlines()
