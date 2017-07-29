@@ -1,6 +1,6 @@
 import requests, time, threading,_thread,xxhash
 import hashlib
-import os, sys, socket, json, random, string
+import os, sys, socket, json, random, string, getpass
 
 def my_ip():
     s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
@@ -95,7 +95,7 @@ attempts = 5
 #Authentication
 while auth != 1 and attempts != 0:
     username = input("Username: ")
-    password = input("Password: ")
+    password = getpass.getpass(prompt="Password: ", stream=None)
     ipaddr = my_ip()
     r = requests.post("http://"+localhost+"/auth.php", data = {'username':username, 'passw':password, 'ipaddr':ipaddr})
     if r.text == '1':
