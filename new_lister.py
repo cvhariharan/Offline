@@ -62,7 +62,7 @@ if os.path.isfile("files.json"):
     test_block = json.loads(all_files)
     fr.close()
     #print(test_block)
-    for dirs in glob.iglob(os.getcwd()+"/**/",recursive=True): #Only directories
+    for dirs in glob.iglob("./**/",recursive=True): #Only directories
         try:
             #print(test_block[dirs])
             now_mtime = os.path.getmtime(dirs)
@@ -73,7 +73,7 @@ if os.path.isfile("files.json"):
             dir_hash(dirs)
 
     for extension in formats: #Only the files with give formats
-        for filename in glob.iglob(os.getcwd()+"/**/*"+extension,recursive=True):
+        for filename in glob.iglob("./**/*"+extension,recursive=True):
             try:
                 #print(test_block[filename])
                 now_mtime = os.path.getmtime(filename)
@@ -95,10 +95,10 @@ if os.path.isfile("files.json"):
 
 
 else:
-    for dirs in glob.iglob(os.getcwd()+"/**/",recursive=True): #Only directories
+    for dirs in glob.iglob("./**/",recursive=True): #Only directories
         dir_hash(dirs)
     for extension in formats: #Only the files with give formats
-        for filename in glob.iglob(os.getcwd()+"/**/*"+extension,recursive=True):
+        for filename in glob.iglob("./**/*"+extension,recursive=True):
             file_hash(filename)
 json_h = json.dumps(test_block,separators=(',',':')) #Remove whitespaces
 #print(json_h)
