@@ -100,6 +100,8 @@ while auth != 1 and attempts != 0:
     r = requests.post("http://"+localhost+"/auth.php", data = {'username':username, 'passw':password, 'ipaddr':ipaddr})
     if r.text == '1':
         print ("Authentication Successful!")
+        notification = requests.get("http://"+localhost+"/notification.php")
+        print(notification.text)
         auth = 1
         send_directory()
         break;
