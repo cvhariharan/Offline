@@ -18,7 +18,8 @@ foreach ($all_keys as $key)
   {
   $name = $json[$key]["name"];
   $hash = $json[$key]["hash"];
-  $sql = "INSERT INTO `files`(`name`, `location`, `ip`, `username`, `server_user`, `server_pass`, `port`,`hash`) VALUES (\"$name\",\"$key\",\"$ipaddr\",\"$username\",\"$server_user\",\"$server_pass\",\"$port\",\"$hash\")";
+  $loc = substr($key,1); //To remove the dot 
+  $sql = "INSERT INTO `files`(`name`, `location`, `ip`, `username`, `server_user`, `server_pass`, `port`,`hash`) VALUES (\"$name\",\"$loc\",\"$ipaddr\",\"$username\",\"$server_user\",\"$server_pass\",\"$port\",\"$hash\")";
   //echo $sql;
   $result = mysqli_query($link,$sql);
 }
