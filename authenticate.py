@@ -26,17 +26,22 @@ def server_status():
     return status
 
 def check_symlinks():
-    no_of_links = len(data)
-    i = 4
-    while i < no_of_links:
-        path_breakdown = data[i].strip("/")
-        symlink = path_breakdown[(len(path_breakdown)-1)]
-        if not os.path.islink(os.getcwd()+"/"+symlink):
-            #print(os.getcwd()+"/"+symlink)
-            data[i] = ""
-        i += 1
-    server_conf = open("sr.conf","w")
-    server_conf.writelines(data)
+        sr = open("sr.conf","r")
+        links = sr.readlines()
+        sr.close()
+        #print(links)
+        i = 4
+        while i < len(links):
+            link_name = links[i].split(":")[1]
+            link_name = link_name.replace("\n","")
+            if not os.path.islink(os.getcwd()+"/"+link_name):
+                print(link_name)
+                links[i] = ""
+            i += 1
+        #print(links)
+        sr = open("sr.conf","w")
+        sr.writelines(links)
+        sr.close()
 
 
 def select_choice():
