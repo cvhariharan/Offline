@@ -1,4 +1,4 @@
-import requests, time, threading,_thread,xxhash
+import requests, time, threading,_thread
 import hashlib
 import os, sys, socket, json, random, string, getpass
 
