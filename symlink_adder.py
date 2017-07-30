@@ -1,4 +1,4 @@
-import os,sys
+import os,sys, win32file
 dirs = ""
 sr_read = open("sr.conf","r")
 symlinks = sr_read.read().split("\n")[4:] #The last element in the list is an empty string because of the \n character
@@ -20,10 +20,11 @@ sr_file.close();
 sr_read = open("sr.conf","r")
 symlinks = sr_read.read().split("\n")[4:] #The last element in the list is an empty string because of the \n character
 for sym in symlinks:
-    dir_name = sym.split("/")[(len(sym.split("/"))-1)]
-    #print(dir_name)
-    if os.path.isdir(sym) and not os.path.islink(dir_name): #Check if it is a dir and whether already a symlink exists
-            os.system("ln -s "+sym)
+    dir_name = input("Name: ")
+    print("symlink_maker.exe "+os.getcwd()+"\\"+dir_name+" "+sym)
+    if os.path.isdir(sym) and not os.path.islink(os.getcwd()+"\\"+dir_name): #Check if it is a dir and whether already a symlink exists
+            print("symlink_maker.exe "+os.getcwd()+"\\"+dir_name+" "+sym)
+            os.system("symlink_maker.exe "+os.getcwd()+"\\"+dir_name+" "+sym)
     else:
-        break;
+        break
 #print(symlinks)
