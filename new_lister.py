@@ -1,11 +1,11 @@
 import os,glob
-import hashlib,_thread,xxhash,json
+import hashlib,_thread,json
 #from datetime import datetime
 #The following function does not generate md5 hash. It uses xxhash. The entire file is not hashed. Only 18 chunks of 8k from the middle is hashed.
 def md5sum(filename):
     try:
          with open(filename, mode='rb') as f:
-           d = xxhash.xxh64()
+           d = hashlib.sha1()
            i=0;
            mid = int((os.path.getsize(filename))/2)
            f.seek(mid)
@@ -39,7 +39,7 @@ def dir_hash(dir_name):
     for root, dirs, files in os.walk(dir_name, topdown=False):
         for name in files:
             hashes = hashes+md5sum(os.path.join(root,name))
-    hashes = str(xxhash.xxh64(hashes).hexdigest()).strip("b").strip("\'")
+    hashes = str(hashlib.sha1(hashes.encode('UTF-8')).hexdigest()).strip("b").strip("\'")
     last_modified = os.path.getmtime(dir_name)
     mtime = os.path.getmtime(dir_name)
     fname = dir_name.split("/")[(len(dir_name.split("/"))-2)] #For directories the format is /path/to/dir_name/
