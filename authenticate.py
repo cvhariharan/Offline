@@ -35,7 +35,7 @@ def check_symlinks():
             link_name = links[i].split(":")[1]
             link_name = link_name.replace("\n","")
             if not os.path.islink(os.getcwd()+"/"+link_name):
-                print(link_name)
+                #print(link_name)
                 links[i] = ""
             i += 1
         #print(links)
