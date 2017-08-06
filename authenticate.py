@@ -48,7 +48,7 @@ def select_choice():
                 downloader()
                 continue;
             if choice == "2":
-                os.system("python3 symlink_adder.py")
+                os.system("python symlink_adder.py")
                 send_directory()
                 continue
             if choice == "exit":
@@ -59,7 +59,7 @@ def select_choice():
             sys.exit(0)
 
 def send_directory():
-    os.system("python3 new_lister.py")
+    os.system("python new_lister.py")
     file_dat = open("files.json","r")
     all_files = file_dat.read()
     dir_block = json.loads(all_files)

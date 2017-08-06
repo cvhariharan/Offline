@@ -56,7 +56,7 @@ def dir_hash(dir_name):
     #print(test_block[dir_name])
     #print(fname+"-->"+str(mtime))
     #f.write(dir_name+":"+hashes+'\r\n')
-
+print("Indexing and hashing all the files. This might take some time.")
 formats = [".jpg",".png",".avi",".mp4",".mp3",".mkv",".zip",".rar"]
 test_block = {}
 if os.path.isfile("files.json"):
