@@ -19,11 +19,12 @@ def md5sum(filename):
     except FileNotFoundError:
         blank = ""
         return blank
-
+#Hashes the files and creates the entry for each file.
 def file_hash(dir_name):
     #print(dir_name)
+    #dir_name.replace("\\","/")
     mtime = os.path.getmtime(dir_name)
-    fname = dir_name.split("/")[(len(dir_name.split("/"))-1)]
+    fname = dir_name.split("\\")[(len(dir_name.split("\\"))-1)]
     hashed = md5sum(dir_name)
     block = {}
     block['name'] = fname
@@ -33,8 +34,11 @@ def file_hash(dir_name):
     test_block[dir_name] = block
     #print(fname+"-->"+str(mtime))
     #f.write(dir_name+":"+hashed+'\r\n')
+
+#Hashes the directories and creates the entry for each directory.
 def dir_hash(dir_name):
     #print(dir_name)
+    #dir_name.replace("\\","/")
     hashes = ""
     for root, dirs, files in os.walk(dir_name, topdown=False):
         for name in files:
@@ -42,7 +46,7 @@ def dir_hash(dir_name):
     hashes = str(hashlib.sha1(hashes.encode('UTF-8')).hexdigest()).strip("b").strip("\'")
     last_modified = os.path.getmtime(dir_name)
     mtime = os.path.getmtime(dir_name)
-    fname = dir_name.split("/")[(len(dir_name.split("/"))-2)] #For directories the format is /path/to/dir_name/
+    fname = dir_name.split("\\")[(len(dir_name.split("\\"))-2)] #For directories the format is /path/to/dir_name/
     block = {}
     block['name'] = fname
     block['mtime'] = mtime
@@ -104,5 +108,5 @@ json_h = json.dumps(test_block,separators=(',',':')) #Remove whitespaces
 #print(json_h)
 f = open("files.json","w")
 #print(master_block)
-f.write(str(json_h))
+f.write(str(json_h).replace("\\\\","/").replace("./","/"))
 f.close()
