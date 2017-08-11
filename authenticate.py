@@ -1,4 +1,4 @@
-import requests, time, threading,_thread,xxhash
+import requests, time, threading,_thread
 import hashlib
 import os, sys, socket, json, random, string, getpass
 
@@ -78,44 +78,47 @@ def send_directory():
     json_dirs = json.dumps(dir_block,separators=(',',':')) #Remove whitespaces
     response = requests.post("http://localhost/Offline/direcctorylist.php", data = json_dirs)
 
-server_conf = open("sr.conf","r")
-data = server_conf.readlines()
-server_user = data[0].strip('Username:').strip('\n')
-server_pass = data[1].strip('Password:').strip('\n')
-port = int(data[2].strip('Port:').strip('\n'))
-localhost = data[3].strip('Localhost:').strip('\n')
-server_conf.close()
-status = 0 #Server is Offline
+try:
+	server_conf = open("sr.conf","r")
+	data = server_conf.readlines()
+	server_user = data[0].strip('Username:').strip('\n')
+	server_pass = data[1].strip('Password:').strip('\n')
+	port = int(data[2].strip('Port:').strip('\n'))
+	localhost = data[3].strip('Localhost:').strip('\n')
+	server_conf.close()
+	status = 0 #Server is Offline
 
-check_symlinks()
+	check_symlinks()
 
-headers = {'content-type': 'application/json'}
-if server_status() == 0:
-    server_thread = threading.Thread(target=basichttpserver,args=(port,server_user,server_pass,))
-    server_thread.setDaemon(True)
-    server_thread.start()
-    server_thread.join(2)
-auth = 0
-attempts = 5
-#Authentication
-while auth != 1 and attempts != 0:
-    username = input("Username: ")
-    password = getpass.getpass(prompt="Password: ", stream=None)
-    ipaddr = my_ip()
-    r = requests.post("http://"+localhost+"/auth.php", data = {'username':username, 'passw':password, 'ipaddr':ipaddr})
-    if r.text == '1':
-        print ("Authentication Successful!")
-        notification = requests.get("http://"+localhost+"/notification.php")
-        print(notification.text)
-        auth = 1
-        send_directory()
-        break;
+	headers = {'content-type': 'application/json'}
+	if server_status() == 0:
+		server_thread = threading.Thread(target=basichttpserver,args=(port,server_user,server_pass,))
+		server_thread.setDaemon(True)
+		server_thread.start()
+		server_thread.join(2)
+	auth = 0
+	attempts = 5
+	#Authentication
+	while auth != 1 and attempts != 0:
+		username = input("Username: ")
+		password = getpass.getpass(prompt="Password: ", stream=None)
+		ipaddr = my_ip()
+		r = requests.post("http://"+localhost+"/auth.php", data = {'username':username, 'passw':password, 'ipaddr':ipaddr})
+		if r.text == '1':
+			print ("Authentication Successful!")
+			notification = requests.get("http://"+localhost+"/notification.php")
+			print(notification.text)
+			auth = 1
+			send_directory()
+			break;
 
-    elif attempts != 0:
-        if attempts != 1:
-            print("Authentication Failed! Try Again.")
-        attempts-=1
-        print("Attemps remaining "+str(attempts))
+		elif attempts != 0:
+			if attempts != 1:
+				print("Authentication Failed! Try Again.")
+			attempts-=1
+			print("Attemps remaining "+str(attempts))
 
 
-select_choice()
+	select_choice()
+except FileNotFoundError:
+	print("Sr.conf file not found. Make sure you download it and place it in the current directory.")
