@@ -8,7 +8,7 @@ def my_ip():
     return s.getsockname()[0]
 
 def basichttpserver(port,username,password):
-    server_command = "Server-win.exe --username "+server_user+" --password "+server_pass+" -p "+str(port)+" > server.log"
+    server_command = "start /min cmd.exe @cmd /k \" echo \"Don't close this console! This is necessary to share files.\" & Server-win.exe --username "+server_user+" --password "+server_pass+" -p "+str(port)+" > server.log\""
     output = os.system(server_command)
 
 def downloader():
@@ -42,19 +42,23 @@ def check_symlinks():
 def select_choice():
     while True:
         if auth == 1:
-            print("1.Download\n2.Add Directory\n")
-            choice = str(input("Enter 1 or 2 and exit to exit: "))
-            if choice == "1":
-                downloader()
-                continue;
-            if choice == "2":
-                os.system("python symlink_adder.py")
-                send_directory()
-                continue
-            if choice == "exit":
-                break;
+            if server_status() == 1:
+                print("1.Download\n2.Add Directory\n")
+                choice = str(input("Enter 1 or 2 and exit to exit: "))
+                if choice == "1":
+                    downloader()
+                    continue;
+                if choice == "2":
+                    os.system("python symlink_adder.py")
+                    send_directory()
+                    continue
+                if choice == "exit":
+                    break;
+                else:
+                    print("Invalid selection!")
             else:
-                print("Invalid selection!")
+                print("You seem to have exit the client server cmd prompt. Please try again with all cmd prompts working.")
+            
         else:
             sys.exit(0)
 
@@ -90,7 +94,7 @@ try:
 			server_thread = threading.Thread(target=basichttpserver,args=(port,server_user,server_pass,))
 			server_thread.setDaemon(True)
 			server_thread.start()
-			server_thread.join(2)
+			server_thread.join(5)
 		auth = 0
 		attempts = 5
 		#Authentication
