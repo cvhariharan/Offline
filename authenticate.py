@@ -84,37 +84,40 @@ try:
 	status = 0 #Server is Offline
 
 	check_symlinks()
+	try:
+		headers = {'content-type': 'application/json'}
+		if server_status() == 0:
+			server_thread = threading.Thread(target=basichttpserver,args=(port,server_user,server_pass,))
+			server_thread.setDaemon(True)
+			server_thread.start()
+			server_thread.join(2)
+		auth = 0
+		attempts = 5
+		#Authentication
+		while auth != 1 and attempts != 0:
+			username = input("Username: ")
+			password = getpass.getpass(prompt="Password: ", stream=None)
+			ipaddr = my_ip()
+			r = requests.post("http://"+localhost+"/auth.php", data = {'username':username, 'passw':password, 'ipaddr':ipaddr})
+			if r.text == '1':
+				print ("Authentication Successful!")
+				notification = requests.get("http://"+localhost+"/notification.php")
+				print(notification.text)
+				auth = 1
+				send_directory()
+				break;
 
-	headers = {'content-type': 'application/json'}
-	if server_status() == 0:
-		server_thread = threading.Thread(target=basichttpserver,args=(port,server_user,server_pass,))
-		server_thread.setDaemon(True)
-		server_thread.start()
-		server_thread.join(2)
-	auth = 0
-	attempts = 5
-	#Authentication
-	while auth != 1 and attempts != 0:
-		username = input("Username: ")
-		password = getpass.getpass(prompt="Password: ", stream=None)
-		ipaddr = my_ip()
-		r = requests.post("http://"+localhost+"/auth.php", data = {'username':username, 'passw':password, 'ipaddr':ipaddr})
-		if r.text == '1':
-			print ("Authentication Successful!")
-			notification = requests.get("http://"+localhost+"/notification.php")
-			print(notification.text)
-			auth = 1
-			send_directory()
-			break;
-
-		elif attempts != 0:
-			if attempts != 1:
-				print("Authentication Failed! Try Again.")
-			attempts-=1
-			print("Attemps remaining "+str(attempts))
+			elif attempts != 0:
+				if attempts != 1:
+					print("Authentication Failed! Try Again.")
+				attempts-=1
+				print("Attemps remaining "+str(attempts))
 
 
-	select_choice()
+		select_choice()
+	except requests.exceptions.RequestException as e:
+		print("Server is not live. Please try again later!")
+		
 except FileNotFoundError:
 	print("Sr.conf file not found. Make sure to download it and place it in the current directory.")
 
