@@ -8,12 +8,12 @@ def my_ip():
     return s.getsockname()[0]
 
 def basichttpserver(port,username,password):
-    server_command = "./Server --username "+server_user+" --password "+server_pass+" -p "+str(port)+" > server.log"
+    server_command = "./Server --username "+server_user+" --password "+server_pass+" -p "+str(port)+" > server.log\""
     output = os.system(server_command)
 
 def downloader():
     hv_file = input("Name of the hv file: ")
-    com = "python downloader.py "+ hv_file
+    com = "python downloader "+ hv_file
     os.system(com)
 
 def server_status():
@@ -26,45 +26,44 @@ def server_status():
     return status
 
 def check_symlinks():
-        sr = open("sr.conf","r")
-        links = sr.readlines()
-        sr.close()
-        #print(links)
-        i = 4
-        while i < len(links):
-            link_name = links[i].split(":")[1]
-            link_name = link_name.replace("\n","")
-            if not os.path.islink(os.getcwd()+"/"+link_name):
-                #print(link_name)
-                links[i] = ""
-            i += 1
-        #print(links)
-        sr = open("sr.conf","w")
-        sr.writelines(links)
-        sr.close()
+    no_of_links = len(data)
+    i = 4
+    while i < no_of_links:
+        path_breakdown = data[i].strip("/")
+        symlink = path_breakdown[(len(path_breakdown)-1)]
+        if not os.path.islink(os.getcwd()+"/"+symlink):
+            #print(os.getcwd()+"/"+symlink)
+            data[i] = ""
+        i += 1
+    server_conf = open("sr.conf","w")
+    server_conf.writelines(data)
 
 
 def select_choice():
     while True:
         if auth == 1:
-            print("1.Download\n2.Add Directory\n")
-            choice = str(input("Enter 1 or 2 and exit to exit: "))
-            if choice == "1":
-                downloader()
-                continue;
-            if choice == "2":
-                os.system("python3 symlink_adder.py")
-                send_directory()
-                continue
-            if choice == "exit":
-                break;
+            if server_status() == 1:
+                print("1.Download\n2.Add Directory\n")
+                choice = str(input("Enter 1 or 2 and exit to exit: "))
+                if choice == "1":
+                    downloader()
+                    continue;
+                if choice == "2":
+                    os.system("python3 symlink_adder.py")
+                    send_directory()
+                    continue
+                if choice == "exit":
+                    break;
+                else:
+                    print("Invalid selection!")
             else:
-                print("Invalid selection!")
+                print("You seem to have exit the client server cmd prompt. Please try again with all cmd prompts working.")
+            
         else:
             sys.exit(0)
 
 def send_directory():
-    os.system("python3 new_lister.py")
+    os.system("new_lister.exe")
     file_dat = open("files.json","r")
     all_files = file_dat.read()
     dir_block = json.loads(all_files)
@@ -76,7 +75,7 @@ def send_directory():
     block['port'] = port
     dir_block["me"] = block
     json_dirs = json.dumps(dir_block,separators=(',',':')) #Remove whitespaces
-    response = requests.post("http://"+localhost+"/Offline/direcctorylist.php", data = json_dirs)
+    response = requests.post("http://"+localhost+"/direcctorylist.php", data = json_dirs)
 
 try:
 	server_conf = open("sr.conf","r")
@@ -89,36 +88,40 @@ try:
 	status = 0 #Server is Offline
 
 	check_symlinks()
+	try:
+		headers = {'content-type': 'application/json'}
+		if server_status() == 0:
+			server_thread = threading.Thread(target=basichttpserver,args=(port,server_user,server_pass,))
+			server_thread.setDaemon(True)
+			server_thread.start()
+			server_thread.join(5)
+		auth = 0
+		attempts = 5
+		#Authentication
+		while auth != 1 and attempts != 0:
+			username = input("Username: ")
+			password = getpass.getpass(prompt="Password: ", stream=None)
+			ipaddr = my_ip()
+			r = requests.post("http://"+localhost+"/auth.php", data = {'username':username, 'passw':password, 'ipaddr':ipaddr})
+			if r.text == '1':
+				print ("Authentication Successful!")
+				notification = requests.get("http://"+localhost+"/notification.php")
+				print(notification.text)
+				auth = 1
+				send_directory()
+				break;
 
-	headers = {'content-type': 'application/json'}
-	if server_status() == 0:
-		server_thread = threading.Thread(target=basichttpserver,args=(port,server_user,server_pass,))
-		server_thread.setDaemon(True)
-		server_thread.start()
-		server_thread.join(2)
-	auth = 0
-	attempts = 5
-	#Authentication
-	while auth != 1 and attempts != 0:
-		username = input("Username: ")
-		password = getpass.getpass(prompt="Password: ", stream=None)
-		ipaddr = my_ip()
-		r = requests.post("http://"+localhost+"/auth.php", data = {'username':username, 'passw':password, 'ipaddr':ipaddr})
-		if r.text == '1':
-			print ("Authentication Successful!")
-			notification = requests.get("http://"+localhost+"/notification.php")
-			print(notification.text)
-			auth = 1
-			send_directory()
-			break;
-
-		elif attempts != 0:
-			if attempts != 1:
-				print("Authentication Failed! Try Again.")
-			attempts-=1
-			print("Attemps remaining "+str(attempts))
+			elif attempts != 0:
+				if attempts != 1:
+					print("Authentication Failed! Try Again.")
+				attempts-=1
+				print("Attemps remaining "+str(attempts))
 
 
-	select_choice()
+		select_choice()
+	except requests.exceptions.RequestException as e:
+		print("Server is not live. Please try again later!")
+		
 except FileNotFoundError:
-	print("Sr.conf file not found. Make sure you download it and place it in the current directory.")
+	print("Sr.conf file not found. Make sure to download it and place it in the current directory.")
+
