@@ -26,10 +26,10 @@ $servername = $row['username'];
 header("Content-type: text/plain");
 header("Content-Disposition: attachment; filename=$name.hv");
 $content = "Name:$name\r\nLocation:$location\r\nServer:$server\r\nPort:$port\r\nUsername:$user\r\nPassword:$pass\r\nHash:$hash\r\nServername:$servername\r\n";
-$iv = "1234567812345678";
-$password = random_string();
-$encrypted = openssl_encrypt($content,'AES-256-CBC',$password);
-$encrypted = substr_replace($encrypted,$password,23,0);
+//$iv = "2712199708321234";
+//$password = random_string();
+$encrypted = base64_encode(base64_encode($content));//base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $password, $content, MCRYPT_MODE_CBC, $iv));
+//$encrypted = substr_replace($encrypted,$password,23,0);
 echo ($encrypted);
 }
 else
