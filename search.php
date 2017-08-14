@@ -26,7 +26,7 @@ while($row = mysqli_fetch_array($result))
   $name = $row['name'];
   $hash = $row['hash'];
   $host = $row['username'];
-  echo "<div class=\"links\">From: $host <a href=\"http://192.168.0.8/Offline/postman.php?hash=$hash\">$name</a></div><br>";
+  echo "<div class=\"links\"><a href=\"postman.php?hash=$hash\">$name</a></div><br>";
 }
 }
 else
