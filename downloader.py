@@ -1,4 +1,4 @@
-import os,urllib3,urllib
+import os,urllib,requests
 import base64,sys
 from Crypto.Cipher import AES
 server_conf = open("sr.conf","r")
@@ -8,26 +8,24 @@ server_pass = data[1].strip('Password:').strip('\n')
 port = int(data[2].strip('Port:').strip('\n'))
 localhost = data[3].strip('Localhost:').strip('\n')
 def dns(name):
-    http = urllib3.PoolManager()
-    r = http.request('POST','http://'+localhost+'/dns_server.php',fields={'name':name})
-    return r.data
+    #http = urllib3.PoolManager()
+    r = requests.post('http://'+localhost+'/dns_server.php',data={'name':name})
+    return r.text
 def decodeAnddownload(fname):
     if os.path.exists(os.getcwd()+"/"+fname):
         f = open(fname,"r")
         to_read = f.read()
-        IV = 16 * '\x00'
+        to_read = to_read[40:] #I can't find from where the initial 40 characters come from.
+        #IV = 16 * '\x00'
 
-        def decrypt(enc, key):
-            decobj = AES.new(key, AES.MODE_CBC, IV)
-            data = decobj.decrypt(base64.b64decode(enc))
-            return str(data.decode())
+        def decrypt(enc):
+            return base64.b64decode(base64.b64decode(enc))
 
-        key = to_read[23:55]
-        to_read = to_read[0:23]+to_read[55:]
+
         #print(key)
-        to_read.replace(key,"")
-        data = decrypt(to_read, key)
+        data = decrypt(to_read)
         lines = data.split('\r\n')
+        #print(lines)
         name = (lines[0].split(':'))[1].strip()
         location = (lines[1].split(':'))[1].strip()
         #server = (lines[2].split(':'))[1].strip()
@@ -38,8 +36,8 @@ def decodeAnddownload(fname):
         servername = (lines[7].split(':'))[1].strip()
         name = urllib.quote(name)
         server = dns(servername)
-        print(server)
-        download_com = "wget -nc -c -r http://"+server_user+":"+server_pass+"@"+server+":"+port+name
+        #print(server)
+        download_com = "wget -nH --no-parent -nc -c -r "+name+" http://"+server_user+":"+server_pass+"@"+server+":"+port+location
         #print(download_com)
         os.system(download_com)
         #os.remove("index.html")
@@ -51,7 +49,6 @@ def decodeAnddownload(fname):
     elif fname != "exit":
         print("No such file found!")
         sys.exit(0)
-fname = ""
-while fname != "exit":
-    fname = sys.argv[1] #raw_input("Name of the file (Type exit to exit): ")
-    decodeAnddownload(fname)
+
+fname = sys.argv[1] #raw_input("Name of the file (Type exit to exit): ")
+decodeAnddownload(fname)
