@@ -71,7 +71,7 @@ def send_directory():
     block['port'] = port
     dir_block["me"] = block
     json_dirs = json.dumps(dir_block,separators=(',',':')) #Remove whitespaces
-    response = requests.post("http://localhost/Offline/direcctorylist.php", data = json_dirs)
+    response = requests.post("http://"+localhost+"/Offline/direcctorylist.php", data = json_dirs)
 
 try:
 	server_conf = open("sr.conf","r")
