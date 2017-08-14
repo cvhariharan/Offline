@@ -13,7 +13,7 @@ def basichttpserver(port,username,password):
 
 def downloader():
     hv_file = input("Name of the hv file: ")
-    com = "python downloader.py "+ hv_file
+    com = "downloader.exe "+ hv_file
     os.system(com)
 
 def server_status():
@@ -63,7 +63,7 @@ def select_choice():
             sys.exit(0)
 
 def send_directory():
-    os.system("python new_lister.py")
+    os.system("new_lister.exe")
     file_dat = open("files.json","r")
     all_files = file_dat.read()
     dir_block = json.loads(all_files)
@@ -75,7 +75,7 @@ def send_directory():
     block['port'] = port
     dir_block["me"] = block
     json_dirs = json.dumps(dir_block,separators=(',',':')) #Remove whitespaces
-    response = requests.post("http://"+localhost+"/Offline/direcctorylist.php", data = json_dirs)
+    response = requests.post("http://"+localhost+"/direcctorylist.php", data = json_dirs)
 
 try:
 	server_conf = open("sr.conf","r")
