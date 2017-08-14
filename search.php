@@ -15,11 +15,13 @@ $current_file = __FILE__;
 require "analytics.php";
 require 'database.php';
 session_start();
-if(isset($_SESSION['login']) && $_SESSION['login']==5)
+if(isset($_SESSION['login']) && $_SESSION['login']==5 )
 {
 $query = $_POST['query'];
+if(isset($_POST["query"]))
+{
 $ipaddr = $_SERVER['REMOTE_ADDR'];
-$sql = "SELECT * FROM files WHERE MATCH (name,location) AGAINST(\"$query\") ORDER BY MATCH (name) AGAINST('$query') DESC";
+$sql = "SELECT * FROM files WHERE MATCH (name,location) AGAINST(\"$query\") ORDER BY MATCH (name) AGAINST(\"$query\") DESC";
 $result = mysqli_query($link,$sql);
 while($row = mysqli_fetch_array($result))
 {
@@ -32,6 +34,7 @@ while($row = mysqli_fetch_array($result))
 else
 {
   echo "<a href=\"login.php\">Login</a>";
+}
 }
 ?>
 </body>
