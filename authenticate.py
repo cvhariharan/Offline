@@ -49,7 +49,7 @@ def select_choice():
                     downloader()
                     continue;
                 if choice == "2":
-                    os.system("python symlink_adder.py")
+                    os.system("symlink_adder.exe")
                     send_directory()
                     continue
                 if choice == "exit":
@@ -57,6 +57,10 @@ def select_choice():
                 else:
                     print("Invalid selection!")
             else:
+                server_thread = threading.Thread(target=basichttpserver,args=(port,server_user,server_pass,))
+		server_thread.setDaemon(True)
+		server_thread.start()
+		server_thread.join(5)
                 print("You seem to have exit the client server cmd prompt. Please try again with all cmd prompts working.")
             
         else:
