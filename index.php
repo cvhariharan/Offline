@@ -11,10 +11,14 @@
   session_start();
   $current_file = __FILE__;
   require "analytics.php";
+  if(isset($_SESSION['username']))
+  {
   $username = $_SESSION['username'];
   $logged = "<ul align=\"right\">
-    <li><a href=\"logout.php\">Hello $username!</a></li>
+    <li><a href=\"logout.php\">Hello $username! Logout?</a></li>
   </ul>";
+  }
+  
   $not_logged = "<ul align=\"right\">
     <li><a href=\"login.php\">Login</a></li>
     <li><a href=\"signup.php\">Signup</a></li>

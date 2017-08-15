@@ -16,9 +16,11 @@ $current_file = __FILE__;
 require "analytics.php";
 require "database.php";
 session_start();
-
+if(isset($_POST['username']) && isset($_POST['passw']))
+{
 $username = $_POST['username'];
 $passw = $_POST['passw'];
+}
 //$ipaddr = $_SERVER['REMOTE_ADDR'];
 if(isset($_POST['username']) && isset($_POST['passw']))
 {

@@ -8,7 +8,6 @@
 <center><form method="POST" action "">
 <div class="heading"><label>Offl!ne</label></div>
 <input type="text" name="query" required>
-
 </form></center>
 <?php
 $current_file = __FILE__;
@@ -17,9 +16,11 @@ require 'database.php';
 session_start();
 if(isset($_SESSION['login']) && $_SESSION['login']==5 )
 {
-$query = $_POST['query'];
+	echo "<a href=\"index.php\">Home</a>";
 if(isset($_POST["query"]))
 {
+$query = $_POST['query'];
+
 $ipaddr = $_SERVER['REMOTE_ADDR'];
 $sql = "SELECT * FROM files WHERE MATCH (name,location) AGAINST(\"$query\") ORDER BY MATCH (name) AGAINST(\"$query\") DESC";
 $result = mysqli_query($link,$sql);
@@ -31,10 +32,10 @@ while($row = mysqli_fetch_array($result))
   echo "<div class=\"links\"><a href=\"postman.php?hash=$hash\">$name</a></div><br>";
 }
 }
+}
 else
 {
   echo "<a href=\"login.php\">Login</a>";
-}
 }
 ?>
 </body>
