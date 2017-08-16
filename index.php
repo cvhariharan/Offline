@@ -22,6 +22,7 @@
   $not_logged = "<ul align=\"right\">
     <li><a href=\"login.php\">Login</a></li>
     <li><a href=\"signup.php\">Signup</a></li>
+	<li><a href=\"sr_generator.php\">SR Generator</a></li>
   </ul>";
   if(isset($_SESSION['login']) && $_SESSION['login']==5)
   {
