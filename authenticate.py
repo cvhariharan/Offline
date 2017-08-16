@@ -10,6 +10,7 @@ def my_ip():
 def basichttpserver(port,username,password):
     server_command = "start /min cmd.exe @cmd /k \" echo \"Don't close this console! This is necessary to share files.\" & Server-win.exe --username "+server_user+" --password "+server_pass+" -p "+str(port)+" > server.log\""
     output = os.system(server_command)
+    
 
 def downloader():
     hv_file = input("Name of the hv file: ")
@@ -57,11 +58,8 @@ def select_choice():
                 else:
                     print("Invalid selection!")
             else:
-                server_thread = threading.Thread(target=basichttpserver,args=(port,server_user,server_pass,))
-		server_thread.setDaemon(True)
-		server_thread.start()
-		server_thread.join(5)
-                print("You seem to have exit the client server cmd prompt. Please try again with all cmd prompts working.")
+                print("You seem to have exit the client server cmd prompt. Restarting the Server ...")
+                start_server()
             
         else:
             sys.exit(0)
@@ -81,6 +79,12 @@ def send_directory():
     json_dirs = json.dumps(dir_block,separators=(',',':')) #Remove whitespaces
     response = requests.post("http://"+localhost+"/direcctorylist.php", data = json_dirs)
 
+def start_server():
+    server_thread = threading.Thread(target=basichttpserver,args=(port,server_user,server_pass,))
+    server_thread.setDaemon(True)
+    server_thread.start()
+    server_thread.join(5)
+
 try:
 	server_conf = open("sr.conf","r")
 	data = server_conf.readlines()
@@ -95,10 +99,7 @@ try:
 	try:
 		headers = {'content-type': 'application/json'}
 		if server_status() == 0:
-			server_thread = threading.Thread(target=basichttpserver,args=(port,server_user,server_pass,))
-			server_thread.setDaemon(True)
-			server_thread.start()
-			server_thread.join(5)
+			start_server()
 		auth = 0
 		attempts = 5
 		#Authentication
