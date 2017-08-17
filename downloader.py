@@ -38,7 +38,7 @@ def decodeAnddownload(fname):
         location = urllib.quote(location)
         server = dns(servername)
         #print(server)
-        download_com = "wget -nH --no-parent -nc -c -r "+name+" http://"+server_user+":"+server_pass+"@"+server+":"+port+"/"+location
+        download_com = "wget -nH --level=0 --no-parent -nc -c -r "+name+" http://"+server_user+":"+server_pass+"@"+server+":"+port+"/"+location
         #print(download_com)
         os.system(download_com)
         #os.remove("index.html")
