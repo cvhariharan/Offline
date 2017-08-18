@@ -12,7 +12,7 @@ void main(int argc, char* argv[])
         strcat(cmd, argv[2]);
         strcat(cmd , " -p ");
         strcat(cmd, argv[3]);
-        strcat(cmd, " > Server.log");
+        //strcat(cmd, " > Server.log");
         //printf("%s",cmd);
     }
 

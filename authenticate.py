@@ -8,7 +8,7 @@ def my_ip():
     return s.getsockname()[0]
 
 def basichttpserver(port,username,password):
-    server_command = "start /min cmd.exe @cmd /k \" echo \"Don't close this console! This is necessary to share files.\" & Server-win.exe --username "+server_user+" --password "+server_pass+" -p "+str(port)+" > server.log\""
+    server_command = "start /min cmd.exe @cmd /k \" echo \"Don't close this console! This is necessary to share files.\" & server.exe "+server_user+" "+server_pass+" "+str(port)+" > server.log\""
     output = os.system(server_command)
     
 
