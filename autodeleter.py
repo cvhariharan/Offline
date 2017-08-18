@@ -1,5 +1,5 @@
 import pymysql,requests,time
-db = pymysql.connect("localhost","root","10sa1017213","Offline")
+db = pymysql.connect("localhost","root","","Offline")
 cursor = db.cursor()
 i=0;
 ips =  []
