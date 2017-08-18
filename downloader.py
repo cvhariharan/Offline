@@ -12,7 +12,7 @@ def dns(name):
     r = requests.post('http://'+localhost+'/dns_server.php',data={'name':name})
     return r.text
 def decodeAnddownload(fname):
-    if os.path.exists(os.getcwd()+"/"+fname):
+    if os.path.exists(fname):
         f = open(fname,"r")
         to_read = f.read()
         to_read = to_read[40:] #I can't find from where the initial 40 characters come from.
