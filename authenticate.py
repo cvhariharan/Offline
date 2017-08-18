@@ -1,5 +1,5 @@
 import requests, time, threading,_thread
-import hashlib
+import hashlib,easygui
 import os, sys, socket, json, random, string, getpass
 
 def my_ip():
@@ -13,9 +13,13 @@ def basichttpserver(port,username,password):
     
 
 def downloader():
-    hv_file = input("Name of the hv file: ")
-    com = "downloader.exe "+ hv_file
-    os.system(com)
+    try:
+        hv_file = easygui.fileopenbox()
+        command = "downloader.exe"+hv_file
+        os.system(command)
+    except TypeError as e:
+        return
+    
 
 def server_status():
     try:
