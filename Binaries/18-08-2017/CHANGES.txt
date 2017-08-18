@@ -1,3 +1,4 @@
 *Added GUI file and directory explorer.
 *Fixed bug that didn't create symlinks for directories with spaces in their names.
 *Fixed the bug that didn't download whole directories in one go.
+*Upload server can now run non-stop.
