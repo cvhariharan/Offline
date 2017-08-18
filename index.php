@@ -22,7 +22,9 @@
   $not_logged = "<ul align=\"right\">
     <li><a href=\"login.php\">Login</a></li>
     <li><a href=\"signup.php\">Signup</a></li>
-	<li><a href=\"sr_generator.php\">SR Generator</a></li>
+    <li><a href=\"sr_generator.php\">SR Generator</a></li>
+    <li><a href=\"How-To.pdf\">How To Use?</a></li>
+    <li><a href=\"Offline_Windows10_64bit.zip\">Download</a></li>
   </ul>";
   if(isset($_SESSION['login']) && $_SESSION['login']==5)
   {
