@@ -1,5 +1,7 @@
 import requests, time, threading,_thread
-import hashlib,easygui
+import hashlib
+from easygui import *
+import easygui
 import os, sys, socket, json, random, string, getpass
 
 def my_ip():
@@ -15,7 +17,7 @@ def basichttpserver(port,username,password):
 def downloader():
 	try:
 		hv_file = easygui.fileopenbox()
-		command = "downloader.exe"+hv_file
+		command = "downloader.exe "+hv_file
 		os.system(command)
 	except TypeError as e:
 		return
@@ -49,15 +51,17 @@ def select_choice():
 		if auth == 1:
 			if server_status() == 1:
 				print("1.Download\n2.Add Directory\n")
-				choice = str(input("Enter 1 or 2 and exit to exit: "))
-				if choice == "1":
+				#choice = str(input("Enter 1 or 2 and exit to exit: "))
+				all_choices = ["Download", "Add Directory","Exit"]
+				choice = choicebox("You want to download or add a directory to be shared?","Choose",all_choices)
+				if choice == "Download":
 					downloader()
 					continue;
-				if choice == "2":
+				if choice == "Add Directory":
 					os.system("symlink_adder.exe")
 					send_directory()
 					continue
-				if choice == "exit":
+				if choice == "Exit":
 					break;
 				else:
 					print("Invalid selection!")
@@ -99,7 +103,9 @@ try:
 	server_conf.close()
 	status = 0 #Server is Offline
 	version = "1.0.0"
-
+	title = "Offline-Authentication"
+	msg = "Enter your Username and Password"
+	fields = ["Username","Password"]
 	check_symlinks()
 	try:
 		headers = {'content-type': 'application/json'}
@@ -109,8 +115,8 @@ try:
 		attempts = 5
 		#Authentication
 		while auth != 1 and attempts != 0:
-			username = input("Username: ")
-			password = getpass.getpass(prompt="Password: ", stream=None)
+			username,password = multpasswordbox(msg,title,fields) #GUI
+			#password = getpass.getpass(prompt="Password: ", stream=None)
 			ipaddr = my_ip()
 			r = requests.post("http://"+localhost+"/auth.php", data = {'username':username, 'passw':password, 'ipaddr':ipaddr})
 			if r.text == '1':
