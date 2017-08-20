@@ -1,0 +1,1 @@
+*Client program can be stopped with a stop signal and message from the main server.
