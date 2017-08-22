@@ -31,7 +31,9 @@ while dirs != "exit":
         #dirs = "\""+dirs+"\"" #Add quotes
         if os.path.isdir(dirs):
             if not (dirs in already_added) and not (dirs in symlinks) and not os.path.islink(dirs): #Check if the directory was already added
-                name = multenterbox("Name this Directory. (This won't change the original name of the folder.)","Offline","Name")
+                name_field = ["name"]
+                name_list = multenterbox("Name this Directory. (This won't change the original name of the folder.)","Offline",name_field)
+                name = ''.join(name_list)
                 name = name.replace(" ","")
                 os.system("mklink /D "+os.getcwd()+"\\"+name+" "+"\""+dirs+"\"")
                 sr_file.write(dirs+":"+name+"\n")
