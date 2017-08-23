@@ -16,8 +16,8 @@ def basichttpserver(port,username,password):
 
 def downloader():
 	try:
-		hv_file = easygui.fileopenbox()
-		command = "downloader.exe "+hv_file
+		hv_file = easygui.fileopenbox() #Does not return the full path
+		command = "downloader.exe "+ "\""+hv_file+"\""
 		os.system(command)
 	except TypeError as e:
 		return
