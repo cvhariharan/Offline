@@ -1,6 +1,6 @@
 import os,urllib,requests
 import base64,sys
-from Crypto.Cipher import AES
+#from Crypto.Cipher import AES
 server_conf = open("sr.conf","r")
 data = server_conf.readlines()
 server_user = data[0].strip('Username:').strip('\n')
@@ -12,7 +12,7 @@ def dns(name):
     r = requests.post('http://'+localhost+'/dns_server.php',data={'name':name})
     return r.text
 def decodeAnddownload(fname):
-    if os.path.exists(os.getcwd()+"/"+fname):
+    if os.path.exists(fname):
         f = open(fname,"r")
         to_read = f.read()
         to_read = to_read[40:] #I can't find from where the initial 40 characters come from.
@@ -35,9 +35,10 @@ def decodeAnddownload(fname):
         md5hash = (lines[6].split(':'))[1].strip()
         servername = (lines[7].split(':'))[1].strip()
         name = urllib.quote(name)
+        location = urllib.quote(location)
         server = dns(servername)
         #print(server)
-        download_com = "wget -nH --no-parent -nc -c -r "+name+" http://"+server_user+":"+server_pass+"@"+server+":"+port+location
+        download_com = "wget -nH --level=0 --no-parent -c -r "+name+" http://"+server_user+":"+server_pass+"@"+server+":"+port+"/"+location
         #print(download_com)
         os.system(download_com)
         #os.remove("index.html")
