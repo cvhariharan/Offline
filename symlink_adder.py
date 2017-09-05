@@ -35,7 +35,7 @@ while dirs != "exit":
                 name_list = multenterbox("Name this Directory. (This won't change the original name of the folder.)","Offline",name_field)
                 name = ''.join(name_list)
                 name = name.replace(" ","")
-                os.system("mklink /D "+os.getcwd()+"\\"+name+" "+"\""+dirs+"\"")
+                os.system("mklink /D "+os.getcwd()+"\\"+name+" "+"\""+dirs+"\"") #Has to be changed to work with linux
                 sr_file.write(dirs+":"+name+"\n")
                 already_added.append(dirs)
             else:
